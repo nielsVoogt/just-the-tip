@@ -1,10 +1,6 @@
 <template>
   <div id="menu">
     <header>
-      <router-link :to="{ name: 'Dashboard' }">LOGO</router-link>
-      <button v-show="!currentUser">
-        <router-link :to="{ name: 'Login' }">Login</router-link>
-      </button>
       <button @click="menuShown = true">
         <menu-icon />
       </button>
@@ -13,9 +9,6 @@
       <nav v-if="menuShown">
         <x-icon @click="menuShown = false" />
         <ul v-show="currentUser">
-          <li>
-            <router-link to="/">Dashboard</router-link>
-          </li>
           <li>
             <a href="#" @click.prevent="signOut">Log out</a>
           </li>
@@ -54,7 +47,7 @@ export default {
         .signOut()
         .then(() => {
           this.$store.dispatch("clearData");
-          this.menuShown = false;
+          this.$router.push("/login");
         })
         .catch((err) => {
           console.log(err);

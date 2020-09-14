@@ -85,7 +85,7 @@ export default {
         .then((cred) => {
           this.$store.commit("setCurrentUser", cred.user);
           this.$store.dispatch("fetchUserProfile");
-          this.$router.push("/dashboard");
+          this.$router.push("/");
         })
         .catch((err) => {
           if (

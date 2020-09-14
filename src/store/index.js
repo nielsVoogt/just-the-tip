@@ -41,4 +41,9 @@ export const store = new Vuex.Store({
       state.userProfile = val;
     },
   },
+  getters: {
+    isAuthenticated: (state) => {
+      return state.currentUser;
+    },
+  },
 });

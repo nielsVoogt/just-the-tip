@@ -2,6 +2,11 @@
   <div>
     <form @submit.prevent="registerUser" v-if="!showTerms">
       <label class="form-group">
+        <div class="form-group-label">Username</div>
+        <input type="text" v-model="user.alias" required />
+      </label>
+
+      <label class="form-group">
         <div class="form-group-label">Email</div>
         <input type="email" v-model="user.email" required />
       </label>
@@ -34,6 +39,7 @@ export default {
       user: {
         email: "",
         password: "",
+        alias: "",
         acceptedTerms: false,
       },
       showTerms: false,
@@ -48,7 +54,10 @@ export default {
           this.$store.commit("setCurrentUser", cred.user);
           fb.usersCollection
             .doc(cred.user.uid)
-            .set({ acceptedTerms: this.user.acceptedTerms })
+            .set({
+              alias: this.user.alias,
+              acceptedTerms: this.user.acceptedTerms,
+            })
             .then(() => {
               this.$store.dispatch("fetchUserProfile");
               this.$router.push({ name: "/" });

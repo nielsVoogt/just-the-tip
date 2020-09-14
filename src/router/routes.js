@@ -1,3 +1,5 @@
+import { store } from "@/store";
+
 const routes = [
   {
     path: "/login",
@@ -13,6 +15,9 @@ const routes = [
   {
     path: "/",
     component: () => import("../views/Main.vue"),
+    beforeEnter: (to, from, next) => {
+      !store.getters.isAuthenticated ? next({ name: "Login" }) : next();
+    },
     children: [
       {
         path: "",
