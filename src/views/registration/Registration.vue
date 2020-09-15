@@ -60,7 +60,7 @@ export default {
             })
             .then(() => {
               this.$store.dispatch("fetchUserProfile");
-              this.$router.push({ name: "/" });
+              this.$router.push({ name: "/login" });
             })
             .catch((err) => {
               console.log(err);
