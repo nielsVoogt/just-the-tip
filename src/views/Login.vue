@@ -85,7 +85,7 @@ export default {
         .then((cred) => {
           this.$store.commit("setCurrentUser", cred.user);
           this.$store.dispatch("fetchUserProfile");
-          this.$router.push("/");
+          this.$router.push("/tips");
         })
         .catch((err) => {
           if (

@@ -1,9 +1,16 @@
 <template>
   <div>
-    <form @submit.prevent="registerUser" v-if="!showTerms">
+    <form @submit.prevent="registerUser">
+
+
       <label class="form-group">
-        <div class="form-group-label">Username</div>
-        <input type="text" v-model="user.alias" required />
+        <div class="form-group-label">First name</div>
+        <input type="text" v-model="user.firstName" required />
+      </label>
+
+      <label class="form-group">
+        <div class="form-group-label">Last name</div>
+        <input type="text" v-model="user.lastName" required />
       </label>
 
       <label class="form-group">
@@ -19,8 +26,7 @@
 
       <label>
         <input type="checkbox" @click="user.acceptedTerms=!user.acceptedTerms" />
-        I agree to the
-        <a href="#" @click.prevent="showTerms=true">to terms and conditions</a>
+        I agree to the to terms and conditions
       </label>
 
       <button type="submit" :disabled="!user.acceptedTerms">Create account</button>
@@ -37,12 +43,13 @@ export default {
   data() {
     return {
       user: {
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         alias: "",
         acceptedTerms: false,
       },
-      showTerms: false,
       feedback: "",
     };
   },
@@ -52,15 +59,16 @@ export default {
         .createUserWithEmailAndPassword(this.user.email, this.user.password)
         .then((cred) => {
           this.$store.commit("setCurrentUser", cred.user);
+          
           fb.usersCollection
             .doc(cred.user.uid)
             .set({
-              alias: this.user.alias,
-              acceptedTerms: this.user.acceptedTerms,
+              firstName: this.user.firstName,
+              lastName: this.user.lastName,
             })
             .then(() => {
               this.$store.dispatch("fetchUserProfile");
-              this.$router.push({ name: "/login" });
+              this.$router.push({ name: "Tips" });
             })
             .catch((err) => {
               console.log(err);

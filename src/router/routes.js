@@ -2,45 +2,56 @@ import { store } from "@/store";
 
 const routes = [
   {
-    path: "/login",
-    component: () => import("../views/EmptyRouterView.vue"),
+    path: "/auth",
+    component: () => import('../layouts/Auth.vue'),
     children: [
       {
-        path: "",
+        path: "/login",
         name: "Login",
-        component: () => import("../views/auth/Login.vue"),
+        component: () => import("../views/Login.vue"),
       },
-    ],
-  },
-  {
-    path: "/",
-    component: () => import("../views/Main.vue"),
-    beforeEnter: (to, from, next) => {
-      !store.getters.isAuthenticated ? next({ name: "Login" }) : next();
-    },
-    children: [
       {
-        path: "",
-        name: "Dashboard",
-        component: () => import("../views/dashboard/Dashboard.vue"),
-      },
-    ],
-  },
-  {
-    path: "/registration",
-    component: () => import("../views/EmptyRouterView.vue"),
-    children: [
-      {
-        path: "",
+        path: "/registration",
         name: "Registration",
-        component: () => import("../views/registration/Registration.vue"),
+        component: () => import("../views/Registration.vue"),
       },
     ],
+  },
+  {
+    path: "",
+    component: () => import("../layouts/Main.vue"),
+    children: [
+      {
+        path: '/',
+        name: 'LandingPage',
+        component: () => import('../views/LandingPage.vue')
+      },
+      {
+        path: '/tips',
+        name: 'Tips',
+        component: () => import('../views/Tips.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/friends',
+        name: 'Friends',
+        component: () => import('../views/Friends.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/settings',
+        name: 'Settings',
+        component: () => import('../views/Settings.vue'),
+        meta: { requiresAuth: true }
+      }
+    ]
   },
   {
     path: "*",
     redirect: "/",
   },
 ];
+
+
 
 export default routes;
