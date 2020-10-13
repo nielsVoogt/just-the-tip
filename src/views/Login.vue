@@ -41,27 +41,20 @@ export default {
     },
 
     login() {
-      this.loginAction({ email: this.email, password: this.password });
-      // fb.auth
-      //   .signInWithEmailAndPassword(
-      //     this.loginForm.email,
-      //     this.loginForm.password
-      //   )
-      //   .then((cred) => {
-      //     this.$store.commit("setCurrentUser", cred.user);
-      //     this.$store.dispatch("fetchUserProfile");
-      //     this.$router.push("/tips");
-      //   })
-      //   .catch((err) => {
-      //     if (
-      //       err.code === "auth/user-not-found" ||
-      //       err.code === "auth/wrong-password"
-      //     ) {
-      //       this.error = "Wrong email or password";
-      //       this.loginForm.email = "";
-      //       this.loginForm.password = "";
-      //     }
-      //   });
+      this.loginAction({ email: this.email, password: this.password })
+        .then(() => {
+          this.$router.push("/tips");
+        })
+        .catch((error) => {
+          if (
+            error.code === "auth/user-not-found" ||
+            error.code === "auth/wrong-password"
+          ) {
+            this.error = "Wrong email or password";
+            this.email = "";
+            this.password = "";
+          }
+        });
     },
   },
 };

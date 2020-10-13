@@ -29,13 +29,13 @@
       </form>
     </div>
     <div v-else>
-      We've sent you a email
+      We've sent you a email?
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+const fb = require("@/firebaseConfig.js");
 
 export default {
   name: "UserRegistration",
@@ -48,18 +48,36 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["signUpAction"]),
     validate() {
       // @TODO: Add validations
       this.signUp();
     },
+
     signUp() {
-      this.signUpAction({ email: this.email, password: this.password })
-        .then(() => {
-          console.log("Het is gelukt!");
+      fb.auth
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((response) => {
+          this.sendConfirmationEmail(response.user.email);
         })
         .catch((error) => {
-          console.log("Het is niet gelukt!", error);
+          console.log("createUserWithEmailAndPassword error:", error);
+        });
+    },
+
+    sendConfirmationEmail(email) {
+      const actionCodeSettings = {
+        url: "http://localhost:8080/confirm-email",
+        handleCodeInApp: true,
+      };
+
+      fb.auth
+        .sendSignInLinkToEmail(email, actionCodeSettings)
+        .then(() => {
+          this.confirmationEmailSent = true;
+          window.localStorage.setItem("emailForSignIn", email);
+        })
+        .catch((error) => {
+          console.log("sendSignInLinkToEmail error:", error);
         });
     },
   },

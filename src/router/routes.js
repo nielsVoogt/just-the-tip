@@ -20,6 +20,11 @@ const routes = [
         name: "ResetPassword",
         component: () => import("../views/ResetPassword.vue"),
       },
+      {
+        path: "/confirm-email",
+        name: "ConfirmEmail",
+        component: () => import("../views/ConfirmEmail.vue"),
+      },
     ],
   },
   {
