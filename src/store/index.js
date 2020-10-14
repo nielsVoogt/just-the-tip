@@ -6,12 +6,13 @@ import getters from "./getters";
 
 Vue.use(Vuex);
 
-// fb.auth.onAuthStateChanged((user) => {
-//   if (user) {
-//     store.commit("setCurrentUser", user);
-//     store.dispatch("fetchUserProfile");
-//   }
-// });
+const fb = require("@/firebaseConfig.js");
+
+fb.auth.onAuthStateChanged((user) => {
+  if (user) {
+    store.commit("setUser", user);
+  }
+});
 
 const initialState = () => {
   return { user: null, error: null };

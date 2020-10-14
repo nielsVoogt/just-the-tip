@@ -7,7 +7,7 @@
       <div>
         <router-link :to="{ name: 'Settings' }">Settings</router-link>
       </div>
-      <!-- <button @click="signOut">Log out</button> -->
+      <button @click="logOutAction()">Log out</button>
     </div>
     <div v-else>
       <router-link :to="{ name: 'Registration' }">Register</router-link> |
@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
-// const fb = require("@/firebaseConfig.js");
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Navigation",
@@ -27,16 +25,7 @@ export default {
     ...mapGetters(["getUser"]),
   },
   methods: {
-    // signOut() {
-    //   fb.auth
-    //     .signOut()
-    //     .then(() => {
-    //       this.$store.dispatch("clearData");
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // },
+    ...mapActions(["logOutAction"]),
   },
 };
 </script>

@@ -1,4 +1,3 @@
-import { store } from "@/store";
 
 const routes = [
   {
@@ -19,11 +18,6 @@ const routes = [
         path: "/reset-password",
         name: "ResetPassword",
         component: () => import("../views/ResetPassword.vue"),
-      },
-      {
-        path: "/confirm-email",
-        name: "ConfirmEmail",
-        component: () => import("../views/ConfirmEmail.vue"),
       },
     ],
   },

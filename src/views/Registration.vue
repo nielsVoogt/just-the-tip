@@ -29,7 +29,7 @@
       </form>
     </div>
     <div v-else>
-      We've sent you a email?
+      We've sent you a email to confirm your account.
     </div>
   </div>
 </template>
@@ -57,27 +57,19 @@ export default {
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          this.sendConfirmationEmail(response.user.email);
-        })
-        .catch((error) => {
-          console.log("createUserWithEmailAndPassword error:", error);
-        });
-    },
+          // @todo - default page looks ugly af, try to change it by using
+          // create custom email handler (https://firebase.google.com/docs/auth/custom-email-handler)
 
-    sendConfirmationEmail(email) {
-      const actionCodeSettings = {
-        url: "http://localhost:8080/confirm-email",
-        handleCodeInApp: true,
-      };
+          const actionCodeSettings = {
+            url: "http://localhost:8080/login",
+            handleCodeInApp: false,
+          };
 
-      fb.auth
-        .sendSignInLinkToEmail(email, actionCodeSettings)
-        .then(() => {
+          response.user.sendEmailVerification(actionCodeSettings);
           this.confirmationEmailSent = true;
-          window.localStorage.setItem("emailForSignIn", email);
         })
         .catch((error) => {
-          console.log("sendSignInLinkToEmail error:", error);
+          console.log("err", error);
         });
     },
   },
