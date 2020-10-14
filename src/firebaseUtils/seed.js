@@ -35,7 +35,7 @@ const firebaseSeed = (userAmount) => {
 
   Promise.all(promises)
     .then(results => {
-      console.log("All done", results);
+      console.log(`${userAmount} users created`);
       process.exit()
     })
     .catch(error => {
