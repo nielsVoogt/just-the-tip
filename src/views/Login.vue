@@ -43,7 +43,7 @@ export default {
     login() {
       this.loginAction({ email: this.email, password: this.password })
         .then(() => {
-          this.$router.push("/tips");
+          this.$router.push({ name: "Tips" });
         })
         .catch((error) => {
           if (
