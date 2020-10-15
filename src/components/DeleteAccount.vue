@@ -1,7 +1,12 @@
 <template>
   <div style="border: 2px solid red; padding: 3em;">
     <input type="password" v-model="confirmUserDeletePassword" />
-    <button type="button" @click="validateUserDelete()">
+    <small v-if="error">{{ error }}</small>
+    <button
+      type="button"
+      @click="validateDeleteUserRequest()"
+      :disabled="confirmUserDeletePassword.length === 0"
+    >
       Delete my account
     </button>
   </div>
@@ -16,18 +21,31 @@ export default {
   data() {
     return {
       confirmUserDeletePassword: "",
+      error: false,
     };
   },
   methods: {
-    ...mapActions["deleteAccountAction"],
+    ...mapActions(["deleteAccountAction"]),
 
-    async validateUserDelete() {
-      const user = await reAuthenticateUser(
-        this.confirmUserDeletePassword
-      ).catch((error) => {
-        console.log("User made mistake in password", error.message);
-      });
-      await this.deleteAccountAction({ user });
+    deleteUser(user) {
+      this.deleteAccountAction(user)
+        .then(() => this.$router.push({ name: "Landingpage" }))
+        .catch((error) => console.error(error));
+    },
+
+    passwordIncorrect() {
+      this.error = "The password is invalid, please enter your password again.";
+      this.confirmUserDeletePassword = "";
+    },
+
+    validateDeleteUserRequest() {
+      reAuthenticateUser(this.confirmUserDeletePassword)
+        .then((user) => this.deleteUser(user))
+        .catch((error) => {
+          error.code === "auth/wrong-password"
+            ? this.passwordIncorrect()
+            : console.error(error);
+        });
     },
   },
 };
