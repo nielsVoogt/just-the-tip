@@ -29,7 +29,7 @@ export default {
 
     deleteUser(user) {
       this.deleteAccountAction(user)
-        .then(() => this.$router.push({ name: "Landingpage" }))
+        .then(() => this.$router.push({ name: "LandingPage" }))
         .catch((error) => console.error(error));
     },
 
