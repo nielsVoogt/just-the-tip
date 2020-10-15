@@ -1,7 +1,7 @@
 const fb = require("@/firebaseConfig.js");
 
 const actions = {
-  
+
   logOutAction({commit}) {
     fb.auth.signOut().then(() => {
       commit("setUser", null)
