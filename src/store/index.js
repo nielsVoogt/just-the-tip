@@ -11,11 +11,12 @@ Vue.use(Vuex);
 fb.auth.onAuthStateChanged((user) => {
   if (user) {
     store.commit("setUser", user);
+    store.dispatch("fetchUserData", user.uid);
   }
 });
 
 const initialState = () => {
-  return { user: null, error: null, userProfile: null };
+  return { user: null, error: null, userProfile: null, userTips: null };
 };
 
 export const store = new Vuex.Store({

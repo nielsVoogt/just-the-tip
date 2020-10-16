@@ -7,7 +7,7 @@ export default function createUserCollections(uid, username) {
     const addUser = fb.usersCollection.doc(uid).set({
       username: username,
       followers: [],
-      firstLogIn: true,
+      firstLogin: true,
     });
 
     Promise.all([addUser, addName, addTips]).then(() => {

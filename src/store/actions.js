@@ -16,6 +16,13 @@ const actions = {
     });
   },
 
+  fetchUserData({ commit }, uid) {
+    const userProfile = fb.usersCollection.doc(uid);
+    const userTips = fb.tipsCollection.doc(uid);
+    userProfile.get().then((doc) => commit("setUserProfile", doc.data()));
+    userTips.get().then((doc) => commit("setUserTips", doc.data()));
+  },
+
   logOutAction({ commit }) {
     return new Promise((resolve, reject) => {
       fb.auth
@@ -39,6 +46,7 @@ const actions = {
           if (!response.user.emailVerified) {
             reject();
           } else {
+            dispatch("fetchUserData", response.user.uid);
             commit("setUser", response.user);
             resolve(response);
           }

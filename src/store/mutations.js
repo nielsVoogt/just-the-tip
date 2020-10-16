@@ -1,7 +1,10 @@
 const mutations = {
-  // setUserProfile(state, payload) {
-  //   state.userProfile = payload;
-  // },
+  setUserTips(state, payload) {
+    state.userTips = payload;
+  },
+  setUserProfile(state, payload) {
+    state.userProfile = payload;
+  },
   setUser(state, payload) {
     state.user = payload;
   },
