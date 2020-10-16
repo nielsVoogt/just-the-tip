@@ -1,4 +1,4 @@
-<template>
+d<template>
   <div>
     <div v-if="!confirmationEmailSent">
       <form>
@@ -39,7 +39,8 @@
         </label> -->
 
         <button type="submit" @click.prevent="validate()">
-          Create account
+          <Spinner v-if="accountSetup" />
+          <span v-else> Create account</span>
         </button>
       </form>
     </div>
@@ -51,11 +52,15 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Spinner from "@/components/Spinner";
 import createUserCollections from "../firebaseUtils/createUserCollections.js";
 const fb = require("@/firebaseConfig.js");
 
 export default {
   name: "UserRegistration",
+  components: {
+    Spinner,
+  },
   data() {
     return {
       username: "",
@@ -65,6 +70,7 @@ export default {
       confirmationEmailSent: false,
       usernameExists: false,
       error: false,
+      accountSetup: false,
     };
   },
   methods: {
@@ -83,6 +89,8 @@ export default {
     },
 
     signUp() {
+      this.accountSetup = true;
+      // @TODO: Creating collections might take a while. Maybe just store the username and do the rest after login
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
