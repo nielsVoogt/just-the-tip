@@ -1,10 +1,25 @@
-<template>
+d<template>
   <div>
     <div v-if="!confirmationEmailSent">
       <form>
         <label class="form-group">
+          <div class="form-group-label">Username</div>
+          <input
+            type="email"
+            v-model="username"
+            required
+            v-on:blur="checkIfUserNameIsUnique()"
+            v-on:change="usernameExists = false"
+          />
+          <div v-if="usernameExists">
+            This username already exists, please choose a different username.
+          </div>
+        </label>
+
+        <label class="form-group">
           <div class="form-group-label">Email</div>
           <input type="email" v-model="email" required />
+          <div v-if="error">{{ error }}</div>
         </label>
 
         <label class="form-group">
@@ -13,7 +28,7 @@
           <small>Password must be at least 6 characters long</small>
         </label>
 
-        <label class="form-group">
+        <!-- <label class="form-group">
           <div class="form-group-label">Repeat password</div>
           <input
             type="password"
@@ -21,55 +36,86 @@
             required
             pattern=".{6,}"
           />
-        </label>
+        </label> -->
 
         <button type="submit" @click.prevent="validate()">
-          Create account
+          <Spinner v-if="accountSetup" />
+          <span v-else> Create account</span>
         </button>
       </form>
     </div>
     <div v-else>
+      <div>📬</div>
       We've sent you a email to confirm your account.
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import createUserCollections from "../firebaseUtils/createUserCollections.js";
+import Spinner from "@/components/Spinner";
+
 const fb = require("@/firebaseConfig.js");
 
 export default {
   name: "UserRegistration",
+  components: {
+    Spinner,
+  },
   data() {
     return {
+      username: "",
       email: "",
       password: "",
       passwordRepeat: "",
       confirmationEmailSent: false,
+      usernameExists: false,
+      accountSetup: false,
+      error: false,
     };
   },
   methods: {
+    ...mapActions(["logOutAction"]),
+    async checkIfUserNameIsUnique() {
+      const chosenUsername = await fb.userNamesCollection
+        .doc(this.username)
+        .get();
+
+      this.usernameExists = chosenUsername.exists;
+    },
+
     validate() {
       // @TODO: Add validations
       this.signUp();
     },
 
     signUp() {
+      this.accountSetup = true;
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          // @todo - default page looks ugly af, try to change it by using
-          // create custom email handler (https://firebase.google.com/docs/auth/custom-email-handler)
-
-          const actionCodeSettings = {
-            url: "http://localhost:8080/login",
-            handleCodeInApp: false,
-          };
-
-          response.user.sendEmailVerification(actionCodeSettings);
-          this.confirmationEmailSent = true;
+          createUserCollections(response.user.uid, this.username).then(() => {
+            // Unfortunatly Firebase does a automatic login after creation.
+            // We block this behaviour by immediatly logging the user out after creation
+            this.logOutAction();
+            response.user
+              .sendEmailVerification({
+                url: "http://localhost:8080/login",
+                handleCodeInApp: false,
+              })
+              .then(() => {
+                this.confirmationEmailSent = true;
+              });
+          });
         })
         .catch((error) => {
-          console.log("err", error);
+          if (error.code === "auth/email-already-in-use") {
+            this.error = error.message;
+            this.email = "";
+          } else {
+            console.log(error);
+          }
         });
     },
   },

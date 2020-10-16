@@ -17,11 +17,22 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 // firebase utils
+const fb = firebase;
 const db = firebase.firestore();
 const auth = firebase.auth();
 const currentUser = auth.currentUser;
 
 // // firebase collections
 const usersCollection = db.collection("users");
+const userNamesCollection = db.collection("usernames");
+const tipsCollection = db.collection("tips");
 
-export { db, auth, currentUser, usersCollection };
+export {
+  fb,
+  db,
+  auth,
+  currentUser,
+  usersCollection,
+  userNamesCollection,
+  tipsCollection,
+};

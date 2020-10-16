@@ -3,28 +3,30 @@ const serviceAccount = require("../../serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.VUE_APP_FIREBASE_DATABASEURL
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASEURL,
 });
 
 const randomUser = () => {
-  const rand = Math.floor(Math.random()*1000)
+  const rand = Math.floor(Math.random() * 1000);
   return {
     email: `user${rand}@example.com`,
     emailVerified: true,
-    password: 'secretPassword',
+    password: "secretPassword",
     displayName: `John Doe ${rand}`,
-  }
-}
+  };
+};
 
 const createNewFirebaseUser = () => {
   return new Promise((resolve) => {
-    admin.auth().createUser(randomUser())
-      .then(userRecord => {
-        resolve(userRecord.uid)
-    })
-    .catch(error => console.log('error', error));
+    admin
+      .auth()
+      .createUser(randomUser())
+      .then((userRecord) => {
+        resolve(userRecord.uid);
+      })
+      .catch((error) => console.log("error", error));
   });
-}
+};
 
 const firebaseSeed = (userAmount) => {
   const promises = [];
@@ -34,14 +36,14 @@ const firebaseSeed = (userAmount) => {
   }
 
   Promise.all(promises)
-    .then(results => {
+    .then(() => {
       console.log(`${userAmount} users created`);
-      process.exit()
+      process.exit();
     })
-    .catch(error => {
-      console.log('A error occured', error)
-      process.exit()
+    .catch((error) => {
+      console.log("A error occured", error);
+      process.exit();
     });
-}
+};
 
-firebaseSeed(3)
+firebaseSeed(3);
