@@ -17,14 +17,18 @@ const actions = {
   },
 
   logOutAction({ commit }) {
-    fb.auth
-      .signOut()
-      .then(() => {
-        commit("setUser", null);
-      })
-      .catch((error) => {
-        commit("setError", error);
-      });
+    return new Promise((resolve, reject) => {
+      fb.auth
+        .signOut()
+        .then((resonse) => {
+          commit("setUser", null);
+          resolve();
+        })
+        .catch((error) => {
+          commit("setError", error);
+          reject();
+        });
+    });
   },
 
   loginAction({ commit }, payload) {
@@ -32,8 +36,12 @@ const actions = {
       fb.auth
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then((response) => {
-          commit("setUser", response.user);
-          resolve(response);
+          if (!response.user.emailVerified) {
+            reject();
+          } else {
+            commit("setUser", response.user);
+            resolve(response);
+          }
         })
         .catch((error) => {
           reject(error);

@@ -8,7 +8,7 @@ export default function reAuthenticateUser(password) {
       password
     );
     user
-      .reauthenticateAndRetrieveDataWithCredential(credentials)
+      .reauthenticateWithCredential(credentials)
       .then((user) => resolve(user))
       .catch((error) => reject(error));
   });

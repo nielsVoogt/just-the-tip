@@ -1,13 +1,13 @@
 <template>
   <div id="menu">
-    <div v-if="getUser">
+    <div v-if="isUserAuth">
       <router-link :to="{ name: 'Tips' }">Your tips</router-link> |
       <router-link :to="{ name: 'Friends' }">Your friends</router-link>
 
       <div>
         <router-link :to="{ name: 'Settings' }">Settings</router-link>
       </div>
-      <button @click="logOutAction()">Log out</button>
+      <button @click="logOut()">Log out</button>
     </div>
     <div v-else>
       <router-link :to="{ name: 'Registration' }">Register</router-link> |
@@ -22,10 +22,15 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Navigation",
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["isUserAuth"]),
   },
   methods: {
     ...mapActions(["logOutAction"]),
+    logOut() {
+      this.logOutAction().then(() =>
+        this.$router.push({ name: "LandingPage" }).catch(() => {})
+      );
+    },
   },
 };
 </script>

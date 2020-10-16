@@ -3,6 +3,11 @@
     <div v-if="!confirmationEmailSent">
       <form>
         <label class="form-group">
+          <div class="form-group-label">Username</div>
+          <input type="email" v-model="username" required />
+        </label>
+
+        <label class="form-group">
           <div class="form-group-label">Email</div>
           <input type="email" v-model="email" required />
         </label>
@@ -13,7 +18,7 @@
           <small>Password must be at least 6 characters long</small>
         </label>
 
-        <label class="form-group">
+        <!-- <label class="form-group">
           <div class="form-group-label">Repeat password</div>
           <input
             type="password"
@@ -21,7 +26,7 @@
             required
             pattern=".{6,}"
           />
-        </label>
+        </label> -->
 
         <button type="submit" @click.prevent="validate()">
           Create account
@@ -36,11 +41,13 @@
 
 <script>
 const fb = require("@/firebaseConfig.js");
+import createUserCollections from "../firebaseUtils/createUserCollections.js";
 
 export default {
   name: "UserRegistration",
   data() {
     return {
+      username: "",
       email: "",
       password: "",
       passwordRepeat: "",
@@ -57,15 +64,11 @@ export default {
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          // @todo - default page looks ugly af, try to change it by using
-          // create custom email handler (https://firebase.google.com/docs/auth/custom-email-handler)
-
-          const actionCodeSettings = {
+          createUserCollections(response.user.uid, this.username);
+          response.user.sendEmailVerification({
             url: "http://localhost:8080/login",
             handleCodeInApp: false,
-          };
-
-          response.user.sendEmailVerification(actionCodeSettings);
+          });
           this.confirmationEmailSent = true;
         })
         .catch((error) => {
