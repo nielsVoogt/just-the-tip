@@ -20,7 +20,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       fb.auth
         .signOut()
-        .then((resonse) => {
+        .then(() => {
           commit("setUser", null);
           resolve();
         })
@@ -31,7 +31,7 @@ const actions = {
     });
   },
 
-  loginAction({ commit }, payload) {
+  loginAction({ commit, dispatch }, payload) {
     return new Promise((resolve, reject) => {
       fb.auth
         .signInWithEmailAndPassword(payload.email, payload.password)

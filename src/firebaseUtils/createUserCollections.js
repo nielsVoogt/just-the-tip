@@ -1,15 +1,17 @@
 const fb = require("@/firebaseConfig.js");
 
 export default function createUserCollections(uid, username) {
-  // Create user in Users collection
-  fb.usersCollection.doc(uid).set({
-    username,
-    followers: [],
+  return new Promise((resolve, _reject) => {
+    const addName = fb.userNamesCollection.doc(username).set({ uid });
+    const addTips = fb.tipsCollection.doc(uid).set({ tips: [] });
+    const addUser = fb.usersCollection.doc(uid).set({
+      username: username,
+      followers: [],
+      firstLogIn: true,
+    });
+
+    Promise.all([addUser, addName, addTips]).then(() => {
+      resolve();
+    });
   });
-
-  // Store chosen username in usernames collection
-  fb.userNamesCollection.doc(username).set({ uid });
-
-  // Create tip collection
-  fb.tipsCollection.doc(uid).set({ tips: [] });
 }

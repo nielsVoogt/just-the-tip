@@ -4,12 +4,22 @@
       <form>
         <label class="form-group">
           <div class="form-group-label">Username</div>
-          <input type="email" v-model="username" required />
+          <input
+            type="email"
+            v-model="username"
+            required
+            v-on:blur="checkIfUserNameIsUnique()"
+            v-on:change="usernameExists = false"
+          />
+          <div v-if="usernameExists">
+            This username already exists, please choose a different username.
+          </div>
         </label>
 
         <label class="form-group">
           <div class="form-group-label">Email</div>
           <input type="email" v-model="email" required />
+          <div v-if="error">{{ error }}</div>
         </label>
 
         <label class="form-group">
@@ -40,8 +50,9 @@
 </template>
 
 <script>
-const fb = require("@/firebaseConfig.js");
+import { mapGetters, mapActions } from "vuex";
 import createUserCollections from "../firebaseUtils/createUserCollections.js";
+const fb = require("@/firebaseConfig.js");
 
 export default {
   name: "UserRegistration",
@@ -52,9 +63,20 @@ export default {
       password: "",
       passwordRepeat: "",
       confirmationEmailSent: false,
+      usernameExists: false,
+      error: false,
     };
   },
   methods: {
+    ...mapActions(["logOutAction"]),
+    async checkIfUserNameIsUnique() {
+      const chosenUsername = await fb.userNamesCollection
+        .doc(this.username)
+        .get();
+
+      this.usernameExists = chosenUsername.exists;
+    },
+
     validate() {
       // @TODO: Add validations
       this.signUp();
@@ -64,15 +86,25 @@ export default {
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          createUserCollections(response.user.uid, this.username);
-          response.user.sendEmailVerification({
-            url: "http://localhost:8080/login",
-            handleCodeInApp: false,
+          createUserCollections(response.user.uid, this.username).then(() => {
+            this.logOutAction();
+            response.user
+              .sendEmailVerification({
+                url: "http://localhost:8080/login",
+                handleCodeInApp: false,
+              })
+              .then(() => {
+                this.confirmationEmailSent = true;
+              });
           });
-          this.confirmationEmailSent = true;
         })
         .catch((error) => {
-          console.log("err", error);
+          if (error.code === "auth/email-already-in-use") {
+            this.error = error.message;
+            this.email = "";
+          } else {
+            console.log(error);
+          }
         });
     },
   },

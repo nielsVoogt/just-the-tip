@@ -1,3 +1,5 @@
+const fb = require("@/firebaseConfig.js");
+
 import Vue from "vue";
 import Vuex from "vuex";
 import mutations from "./mutations";
@@ -6,8 +8,6 @@ import getters from "./getters";
 
 Vue.use(Vuex);
 
-const fb = require("@/firebaseConfig.js");
-
 fb.auth.onAuthStateChanged((user) => {
   if (user) {
     store.commit("setUser", user);
@@ -15,12 +15,12 @@ fb.auth.onAuthStateChanged((user) => {
 });
 
 const initialState = () => {
-  return { user: null, error: null };
+  return { user: null, error: null, userProfile: null };
 };
 
 export const store = new Vuex.Store({
   state: initialState(),
   mutations,
   actions,
-  getters
+  getters,
 });
