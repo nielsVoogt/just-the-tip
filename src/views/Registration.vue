@@ -45,6 +45,7 @@ d<template>
       </form>
     </div>
     <div v-else>
+      <div>📬</div>
       We've sent you a email to confirm your account.
     </div>
   </div>
@@ -52,8 +53,9 @@ d<template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Spinner from "@/components/Spinner";
 import createUserCollections from "../firebaseUtils/createUserCollections.js";
+import Spinner from "@/components/Spinner";
+
 const fb = require("@/firebaseConfig.js");
 
 export default {
@@ -69,8 +71,8 @@ export default {
       passwordRepeat: "",
       confirmationEmailSent: false,
       usernameExists: false,
-      error: false,
       accountSetup: false,
+      error: false,
     };
   },
   methods: {
@@ -90,11 +92,12 @@ export default {
 
     signUp() {
       this.accountSetup = true;
-      // @TODO: Creating collections might take a while. Maybe just store the username and do the rest after login
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
           createUserCollections(response.user.uid, this.username).then(() => {
+            // Unfortunatly Firebase does a automatic login after creation.
+            // We block this behaviour by immediatly logging the user out after creation
             this.logOutAction();
             response.user
               .sendEmailVerification({
