@@ -1,6 +1,11 @@
 <template>
   <AuthPanel>
     <ResetPasswordForm />
+    <template v-slot:link>
+      <router-link :to="{ name: 'Login' }">
+        Back to Login page
+      </router-link>
+    </template>
   </AuthPanel>
 </template>
 

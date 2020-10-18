@@ -11,6 +11,9 @@
         label="Email"
         placeholder="e.g. niels@company.nl"
         v-model="email"
+        :error="fieldErrors.email"
+        @blur="validateEmailAdress()"
+        @change="fieldErrors.email = ''"
       />
 
       <Button type="submit" size="lg" full-width>
@@ -29,6 +32,7 @@
 </template>
 
 <script>
+import { required, email } from "vuelidate/lib/validators";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 const fb = require("@/firebaseConfig.js");
@@ -43,12 +47,30 @@ export default {
     return {
       email: "",
       resetPasswordEmailSent: false,
-      error: null,
+      fieldErrors: {
+        email: "",
+      },
     };
   },
+  validations: {
+    email: {
+      required,
+      email,
+    },
+  },
   methods: {
+    validateEmailAdress() {
+      const isEmailValid = this.$v.email.email;
+      this.fieldErrors.email = !isEmailValid
+        ? "This is not a valid email adress"
+        : "";
+    },
+
     validate() {
-      // @TODO: Add validation
+      if (!this.$v.email.required) {
+        this.fieldErrors.email = "Email adress can't be empty";
+        return;
+      }
       this.resetPassword();
     },
     resetPassword() {
@@ -58,8 +80,12 @@ export default {
           this.resetPasswordEmailSent = true;
         })
         .catch((error) => {
-          this.error = error.message;
-          this.email = "";
+          if (error.code === "auth/user-not-found") {
+            this.fieldErrors.email =
+              "We could not find your email adress. Maybe you made a mistake, check your email adress and try again";
+          } else {
+            console.log(error);
+          }
         });
     },
   },

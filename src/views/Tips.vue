@@ -1,6 +1,16 @@
 <template>
   <div>
-    <h1>This is Tips.{{ getUserProfile.firstLogIn }}</h1>
+    <h1>
+      This is Tips.
+      <div>
+        <p>User first login?</p>
+        {{ getUserProfile.firstLogIn }}
+      </div>
+      <div>
+        <p>Looking at someone elses tips</p>
+        {{ $route.params.slug }}
+      </div>
+    </h1>
   </div>
 </template>
 

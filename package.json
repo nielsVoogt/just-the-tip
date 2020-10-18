@@ -11,13 +11,15 @@
     "reset": "node ./src/firebaseUtils/reset.js"
   },
   "dependencies": {
+    "animejs": "^3.2.1",
     "core-js": "^3.6.4",
     "firebase": "^7.14.2",
     "firebase-admin": "^9.2.0",
     "vue": "^2.6.11",
-    "vue-feather-icons": "^5.0.0",
+    "vue-feather-icons": "^5.1.0",
     "vue-router": "^3.1.6",
     "vue-svg-loader": "^0.16.0",
+    "vuelidate": "^0.7.5",
     "vuex": "^3.1.3"
   },
   "devDependencies": {

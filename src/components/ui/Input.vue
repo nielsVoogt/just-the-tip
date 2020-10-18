@@ -2,22 +2,41 @@
   <label :class="['form-group', { 'form-group--error': error }]">
     <div class="form-group-label">{{ label }}</div>
     <div class="form-group-sublabel" v-if="sublabel">{{ sublabel }}</div>
-    <input
-      class="form-group-input"
-      v-bind="$attrs"
-      :type="type"
-      v-on="$listeners"
-      :value="value"
-      @input="$emit('update', $event.target.value)"
-      @change="$emit('update', $event.target.value)"
-      @blur="$emit('blur')"
-      @focus="$emit('focus')"
-    />
-    <div class="form-group-error" v-if="error">{{ error }}</div>
+    <div class="form-group-input-container">
+      <input
+        class="form-group-input"
+        v-bind="$attrs"
+        :type="inputType"
+        v-on="$listeners"
+        :value="value"
+        @input="$emit('update', $event.target.value)"
+        @change="$emit('update', $event.target.value)"
+        @blur="$emit('blur')"
+        @focus="$emit('focus')"
+        spellcheck="false"
+      />
+      <div class="form-group-icon">
+        <div class="form-group-show-password" v-if="type === 'password'">
+          <eye-off-icon
+            size="1.5x"
+            @click="showPasswordAsPassword()"
+            v-if="inputType === 'text'"
+          />
+          <eye-icon
+            size="1.5x"
+            @click="showPasswordAsText()"
+            v-if="inputType === 'password'"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-group-error" v-if="error.length">{{ error }}</div>
   </label>
 </template>
 
 <script>
+import { EyeIcon, EyeOffIcon } from "vue-feather-icons";
+
 const TYPES = [
   "text",
   "password",
@@ -30,10 +49,15 @@ const TYPES = [
 ];
 
 export default {
+  name: "Input",
   inheritAttrs: false,
+  components: {
+    EyeIcon,
+    EyeOffIcon,
+  },
   props: {
     error: {
-      type: Array,
+      type: [String, Boolean],
       required: false,
     },
     label: {
@@ -62,9 +86,22 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      inputType: this.type,
+    };
+  },
   model: {
     prop: "value",
     event: "update",
+  },
+  methods: {
+    showPasswordAsText() {
+      this.inputType = "text";
+    },
+    showPasswordAsPassword() {
+      this.inputType = "password";
+    },
   },
 };
 </script>
@@ -74,15 +111,12 @@ export default {
   margin-bottom: 1em;
   display: block;
 
-  &--error {
-    .form-group-input {
-      border-color: red;
-    }
+  &--error .form-group-input {
+    border-color: red;
   }
 }
 
 .form-group-input {
-  margin-top: 0.5em;
   width: 100%;
   height: 50px;
   border: 1px solid #cdcdcd;
@@ -110,6 +144,28 @@ export default {
   }
 }
 
+.form-group-input-container {
+  position: relative;
+  margin-top: 0.5em;
+}
+
+.form-group-icon {
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.1s ease-out;
+
+  svg {
+    position: absolute;
+    right: 0.75em;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 .form-group-label {
   color: #393939;
   font-weight: 500;
@@ -119,10 +175,10 @@ export default {
 .form-group-error {
   color: #949494;
   font-size: 0.875rem;
-  margin-top: 0.25em;
 }
 
 .form-group-error {
   color: red;
+  margin-top: 0.5em;
 }
 </style>

@@ -34,7 +34,7 @@ export default {
 <style lang="scss">
 .auth-panel-container {
   margin: 10em auto 2.5em;
-  max-width: 400px;
+  max-width: 30em;
   width: 100%;
 }
 
@@ -49,6 +49,9 @@ export default {
 .auth-panel-link {
   padding: 2em;
   text-align: center;
+  a {
+    text-decoration: none;
+  }
 }
 
 .auth-panel-logo {

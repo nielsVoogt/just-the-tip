@@ -52,7 +52,7 @@ small {
 form {
   margin-top: 1.75em;
 
-  button {
+  button[type="submit"] {
     margin-top: 0.75em;
   }
 }

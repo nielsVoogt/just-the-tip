@@ -4,7 +4,15 @@ d<template>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
       tempor incididunt ut labore.
     </p>
-    <form>
+    <form @submit.prevent="validate()">
+      <div v-if="formError" class="form-error">
+        <span class="form-error-message">
+          {{ formError }}
+        </span>
+        <button @click="formError = ''" class="form-error-close">
+          <XIcon size="1.5x" />
+        </button>
+      </div>
       <Input
         type="text"
         label="Username"
@@ -12,7 +20,8 @@ d<template>
         v-model="username"
         v-on:blur="checkIfUserNameIsUnique()"
         v-on:change="usernameExists = false"
-        error="Wrong stuff brah"
+        :error="fieldErrors.username"
+        @change="fieldErrors.username = ''"
       />
 
       <Input
@@ -20,6 +29,8 @@ d<template>
         label="Email"
         placeholder="e.g. niels@company.nl"
         v-model="email"
+        :error="fieldErrors.email"
+        v-on:blur="validateEmailAdress()"
       />
 
       <Input
@@ -27,16 +38,13 @@ d<template>
         label="Password"
         placeholder="Your password"
         v-model="password"
+        sublabel="Your password should be at least 6 characters long"
+        :error="fieldErrors.password"
+        v-on:blur="validatePassword()"
+        @change="fieldErrors.password = ''"
       />
 
-      <Input
-        type="password"
-        label="Repeat password"
-        placeholder="Repeat your password"
-        v-model="passwordRepeat"
-      />
-
-      <Button type="submit" @click.prevent="validate()" size="lg" full-width>
+      <Button type="submit" size="lg" full-width>
         <Spinner v-if="accountSetup" />
         <span v-else> Create account</span>
       </Button>
@@ -45,6 +53,8 @@ d<template>
 </template>
 
 <script>
+import { XIcon } from "vue-feather-icons";
+import { required, email, minLength } from "vuelidate/lib/validators";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { mapGetters, mapActions } from "vuex";
@@ -59,17 +69,35 @@ export default {
     Spinner,
     Button,
     Input,
+    XIcon,
   },
   data() {
     return {
       username: "",
       email: "",
       password: "",
-      passwordRepeat: "",
       usernameExists: false,
       accountSetup: false,
-      error: false,
+      formError: false,
+      fieldErrors: {
+        username: "",
+        email: "",
+        password: "",
+      },
     };
+  },
+  validations: {
+    username: {
+      required,
+    },
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(6),
+    },
   },
   methods: {
     ...mapActions(["logOutAction"]),
@@ -82,9 +110,30 @@ export default {
       }
     },
 
+    validatePassword() {
+      if (!this.$v.password.minLength) {
+        this.fieldErrors.password =
+          "The password is not long enough, a minimum of 6 characters is required.";
+        return false;
+      }
+    },
+
+    validateEmailAdress() {
+      const isEmailValid = this.$v.email.email;
+      this.fieldErrors.email = !isEmailValid
+        ? "This is not a valid email adress"
+        : "";
+    },
+
     validate() {
-      // @TODO: Add validations
-      this.signUp();
+      if (this.$v.$invalid) {
+        if (this.username === "") this.fieldErrors.username = true;
+        if (this.email === "") this.fieldErrors.email = true;
+        if (this.password === "") this.fieldErrors.password = true;
+        this.formError = "Please fill in all fields";
+      } else {
+        this.signUp();
+      }
     },
 
     signUp() {
@@ -118,3 +167,36 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.form-error {
+  color: red;
+  padding: 1em;
+  background: #ff00000f;
+  border-radius: 7px;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+
+  .form-error-message {
+    padding-right: 1em;
+  }
+
+  .form-error-close {
+    line-height: 1;
+    display: inline-block;
+    margin-left: auto;
+    margin-bottom: auto;
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      display: block;
+    }
+  }
+}
+</style>
