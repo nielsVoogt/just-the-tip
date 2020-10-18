@@ -1,8 +1,7 @@
-
 const routes = [
   {
     path: "/auth",
-    component: () => import('../layouts/Auth.vue'),
+    component: () => import("../layouts/Auth.vue"),
     children: [
       {
         path: "/login",
@@ -26,36 +25,39 @@ const routes = [
     component: () => import("../layouts/Main.vue"),
     children: [
       {
-        path: '/',
-        name: 'LandingPage',
-        component: () => import('../views/LandingPage.vue')
+        path: "/",
+        name: "LandingPage",
+        component: () => import("../views/LandingPage.vue"),
       },
       {
-        path: '/tips',
-        name: 'Tips',
-        component: () => import('../views/Tips.vue'),
-        meta: { requiresAuth: true }
+        path: "/:slug",
+        name: "FriendTips",
+        component: () => import("../views/Tips.vue"),
       },
       {
-        path: '/friends',
-        name: 'Friends',
-        component: () => import('../views/Friends.vue'),
-        meta: { requiresAuth: true }
+        path: "/tips",
+        name: "Tips",
+        component: () => import("../views/Tips.vue"),
+        meta: { requiresAuth: true },
       },
       {
-        path: '/settings',
-        name: 'Settings',
-        component: () => import('../views/Settings.vue'),
-        meta: { requiresAuth: true }
-      }
-    ]
+        path: "/friends",
+        name: "Friends",
+        component: () => import("../views/Friends.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: () => import("../views/Settings.vue"),
+        meta: { requiresAuth: true },
+      },
+    ],
   },
   {
     path: "*",
     redirect: "/",
   },
 ];
-
-
 
 export default routes;
