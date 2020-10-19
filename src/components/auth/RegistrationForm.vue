@@ -5,14 +5,7 @@ d<template>
       tempor incididunt ut labore.
     </p>
     <form @submit.prevent="validate()">
-      <div v-if="formError" class="form-error">
-        <span class="form-error-message">
-          {{ formError }}
-        </span>
-        <button @click="formError = ''" class="form-error-close">
-          <XIcon size="1.5x" />
-        </button>
-      </div>
+      <FormError v-if="formError" :error="formError" @close="formError = ''" />
       <Input
         type="text"
         label="Username"
@@ -53,10 +46,10 @@ d<template>
 </template>
 
 <script>
-import { XIcon } from "vue-feather-icons";
 import { required, email, minLength } from "vuelidate/lib/validators";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import FormError from "@/components/ui/FormError";
 import { mapGetters, mapActions } from "vuex";
 import createUserCollections from "../../firebaseUtils/createUserCollections.js";
 import Spinner from "@/components/ui/Spinner";
@@ -69,7 +62,7 @@ export default {
     Spinner,
     Button,
     Input,
-    XIcon,
+    FormError,
   },
   data() {
     return {
@@ -127,9 +120,9 @@ export default {
 
     validate() {
       if (this.$v.$invalid) {
-        if (this.username === "") this.fieldErrors.username = true;
-        if (this.email === "") this.fieldErrors.email = true;
-        if (this.password === "") this.fieldErrors.password = true;
+        if (!this.$v.username.$required) this.fieldErrors.username = true;
+        if (!this.$v.email.$required) this.fieldErrors.email = true;
+        if (!this.$v.password.$required) this.fieldErrors.password = true;
         this.formError = "Please fill in all fields";
       } else {
         this.signUp();
@@ -167,36 +160,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.form-error {
-  color: red;
-  padding: 1em;
-  background: #ff00000f;
-  border-radius: 7px;
-  margin-bottom: 1em;
-  display: flex;
-  align-items: center;
-
-  .form-error-message {
-    padding-right: 1em;
-  }
-
-  .form-error-close {
-    line-height: 1;
-    display: inline-block;
-    margin-left: auto;
-    margin-bottom: auto;
-    opacity: 0.5;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    svg {
-      display: block;
-    }
-  }
-}
-</style>

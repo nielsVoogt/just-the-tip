@@ -8,6 +8,7 @@ export default function createUserCollections(uid, username) {
       username: username,
       followers: [],
       firstLogin: true,
+      public: true,
     });
 
     Promise.all([addUser, addName, addTips]).then(() => {

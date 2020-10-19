@@ -2,13 +2,12 @@
   <div>
     <h1>
       This is Tips.
-      <div>
+      <div v-if="getUserProfile">
         <p>User first login?</p>
-        {{ getUserProfile.firstLogIn }}
+        {{ getUserProfile.firstLogin }}
       </div>
-      <div>
-        <p>Looking at someone elses tips</p>
-        {{ $route.params.slug }}
+      <div v-if="$route.params.slug">
+        <p>Looking at {{ $route.params.slug }} tips</p>
       </div>
     </h1>
   </div>
@@ -21,6 +20,9 @@ export default {
   name: "Tips",
   computed: {
     ...mapGetters(["getUserProfile"]),
+  },
+  created() {
+    console.log(this.$route.params.slug);
   },
 };
 </script>

@@ -2,7 +2,11 @@
   <div>
     <p class="mb-1">
       The easiest way to share tips among your friends! Use your credentials to
-      log in or <a href="#">click here</a> to create a new account!
+      log in or
+      <router-link :to="{ name: 'Registration' }">
+        click here
+      </router-link>
+      to create a new account!
     </p>
 
     <form @submit.prevent="validate()" novalidate>
