@@ -1,7 +1,7 @@
 <template>
   <div id="menu">
     <div v-if="isUserAuth">
-      <router-link :to="{ name: 'Tips' }">Your tips</router-link> |
+      <router-link :to="{ name: 'MyTips' }">Your tips</router-link> |
       <router-link :to="{ name: 'Friends' }">Your friends</router-link>
 
       <div>

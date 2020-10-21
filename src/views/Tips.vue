@@ -4,13 +4,14 @@
     <div v-if="loading">...loading</div>
     <div v-else>
       {{ this.username }}
-      {{ this.tips }}
+      <Tip v-for="tip in tips" :key="tip.id" :tip="tip.content" :id="tip.id" />
     </div>
   </div>
 </template>
 
 <script>
 import { db } from "@/firebaseConfig.js";
+import Tip from "@/components/tips/Tip";
 import getUidFromSlug from "@/firebaseUtils/getUidFromSlug";
 import getTips from "@/firebaseUtils/getTips";
 import getUserProfile from "@/firebaseUtils/getUserProfile";
@@ -25,6 +26,9 @@ export default {
       public: true,
       error: false,
     };
+  },
+  components: {
+    Tip,
   },
   methods: {
     async checkIfProfileIsPublic(uid) {

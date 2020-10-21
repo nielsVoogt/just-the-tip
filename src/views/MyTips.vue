@@ -1,40 +1,29 @@
 <template>
   <div>
     <h1>
-      This is Tips.
+      These are my Tips.
     </h1>
-    <div v-if="getUserProfile">
-      <p>User first login?</p>
-      {{ getUserProfile.firstLogin }}
-    </div>
-    <div v-for="tip in getUserTips" :key="tip.uid" class="tip">
-      <h2>{{ tip.content.title }}</h2>
-      <p>{{ tip.content.description }}</p>
-    </div>
-    <div v-if="$route.params.slug">
-      <p>Looking at {{ $route.params.slug }} tips</p>
-    </div>
+    <Tip
+      v-for="tip in getUserTips"
+      :key="tip.id"
+      :tip="tip.content"
+      :id="tip.id"
+      showOptions
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import Tip from "@/components/tips/Tip";
 
 export default {
   name: "MyTips",
+  components: {
+    Tip,
+  },
   computed: {
     ...mapGetters(["getUserProfile", "getUserTips"]),
   },
 };
 </script>
-
-<style scoped>
-.tip {
-  border: 1px solid black;
-  padding: 1em;
-  display: inline-block;
-  background: white;
-  margin: 1em;
-  width: 300px;
-}
-</style>

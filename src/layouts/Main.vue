@@ -7,17 +7,12 @@
 </template>
 
 <script>
-import Navigation from "@/components/Navigation";
-import Notifications from "@/components/Notifications";
+import Navigation from "@/components/ui/Navigation";
+import Notifications from "@/components/ui/Notifications";
 
 export default {
   name: "Main",
   components: { Navigation, Notifications },
-  data() {
-    return {
-      notification: "",
-    };
-  },
 };
 </script>
 

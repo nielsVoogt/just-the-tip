@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import reAuthenticateUser from "../firebaseUtils/reAuthenticateUser";
+import reAuthenticateUser from "@/firebaseUtils/reAuthenticateUser";
 import { mapActions } from "vuex";
 
 export default {
