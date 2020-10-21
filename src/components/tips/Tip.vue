@@ -2,13 +2,25 @@
   <div class="tip">
     <h2>{{ tip.title }}</h2>
     <p>{{ tip.description }}</p>
-    {{ showOptions }}
+    <p>{{ tip.url }}</p>
+
+    <OptionsMenu v-if="showOptions">
+      <ul>
+        <li>Option</li>
+        <li>Option</li>
+      </ul>
+    </OptionsMenu>
   </div>
 </template>
 
 <script>
+import OptionsMenu from "@/components/ui/OptionsMenu";
+
 export default {
   name: "Tip",
+  components: {
+    OptionsMenu,
+  },
   props: {
     id: {
       type: String,
