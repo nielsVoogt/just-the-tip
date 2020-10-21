@@ -30,14 +30,14 @@ const routes = [
         component: () => import("../views/LandingPage.vue"),
       },
       {
-        path: "/:slug",
-        name: "FriendTips",
+        path: "/tips/:slug",
+        name: "Tips",
         component: () => import("../views/Tips.vue"),
       },
       {
         path: "/tips",
-        name: "Tips",
-        component: () => import("../views/Tips.vue"),
+        name: "MyTips",
+        component: () => import("../views/MyTips.vue"),
         meta: { requiresAuth: true },
       },
       {

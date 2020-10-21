@@ -23,12 +23,6 @@ h3 {
   font-size: 2rem;
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
 body {
   height: 100%;
   width: 100%;

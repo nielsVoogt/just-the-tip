@@ -1,5 +1,7 @@
 const fb = require("@/firebaseConfig.js");
 
+import getTips from "@/firebaseUtils/getTips";
+
 const actions = {
   deleteAccountAction({ commit }, payload) {
     const user = payload.user;
@@ -16,11 +18,11 @@ const actions = {
     });
   },
 
-  fetchUserData({ commit }, uid) {
+  async fetchUserData({ commit }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
-    const userTips = fb.tipsCollection.doc(uid);
     userProfile.get().then((doc) => commit("setUserProfile", doc.data()));
-    userTips.get().then((doc) => commit("setUserTips", doc.data()));
+    const tips = await getTips(uid);
+    commit("setUserTips", tips);
   },
 
   logOutAction({ commit }) {

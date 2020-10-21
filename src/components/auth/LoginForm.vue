@@ -113,7 +113,7 @@ export default {
       this.loginAction({ email: this.email, password: this.password })
         .then((response) => {
           console.log("loggedInResponse", response);
-          this.$router.push({ name: "Tips" });
+          this.$router.push({ name: "MyTips" });
         })
         .catch((error) => {
           console.log(error);
