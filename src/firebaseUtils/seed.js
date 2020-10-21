@@ -37,32 +37,27 @@ const addUser = (user) => {
   });
 };
 
-const addTips = (user) => {
-  const addTip = (user) => {
-    const randomTip = () => {
-      const lorem = new LoremIpsum();
-      const descriptionLength = Math.floor(Math.random() * 10) + 3;
-      return {
+const addTip = (user) => {
+  const lorem = new LoremIpsum();
+  return new Promise((resolve, _reject) => {
+    db.collection("tips")
+      .doc(user.uid)
+      .collection("content")
+      .add({
         title: lorem.generateWords(4),
-        description: lorem.generateWords(descriptionLength),
+        description: lorem.generateWords(Math.floor(Math.random() * 10) + 3),
         url: Math.random() >= 0.5 ? "www.google.com" : "",
         likes: Math.random() >= 0.5 ? Math.round(Math.random() * 100) : 0,
         category: categories[Math.floor(Math.random() * categories.length)],
-      };
-    };
+      })
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => seedError(error));
+  });
+};
 
-    return new Promise((resolve, _reject) => {
-      db.collection("tips")
-        .doc(user.uid)
-        .collection("content")
-        .add(randomTip())
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => seedError(error));
-    });
-  };
-
+const addTips = (user) => {
   return new Promise((resolve, _reject) => {
     const promises = [];
 
@@ -87,20 +82,16 @@ const createCollections = (users) => {
 };
 
 const createNewFirebaseUser = () => {
-  const randomUser = () => {
-    const rand = Math.floor(Math.random() * 10000);
-    return {
-      email: `user${rand}@example.com`,
-      emailVerified: true,
-      password: "secretPassword",
-      displayName: `JohnDoe${rand}`,
-    };
-  };
-
   return new Promise((resolve, _reject) => {
+    let rand = Math.floor(Math.random() * 10000);
     admin
       .auth()
-      .createUser(randomUser())
+      .createUser({
+        email: `user${rand}@example.com`,
+        emailVerified: true,
+        password: "secretPassword",
+        displayName: `JohnDoe${rand}`,
+      })
       .then((userRecord) => {
         resolve({
           uid: userRecord.uid,
@@ -129,7 +120,7 @@ const seedSuccess = () => {
 };
 
 const seedError = (error) => {
-  console.log("A error occured", error);
+  console.log("A error occured:", error);
   process.exit();
 };
 
