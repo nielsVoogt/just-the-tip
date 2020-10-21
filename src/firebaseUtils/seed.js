@@ -37,7 +37,7 @@ const addUser = (user) => {
   });
 };
 
-function addTips(user) {
+const addTips = (user) => {
   const addTip = (user) => {
     const randomTip = () => {
       const lorem = new LoremIpsum();
@@ -72,13 +72,19 @@ function addTips(user) {
 
     Promise.all(promises).then(() => resolve());
   });
-}
+};
 
-async function createCollection(user) {
-  await addUsername(user);
-  await addUser(user);
-  await addTips(user);
-}
+const createCollections = (users) => {
+  async function createCollection(user) {
+    await addUsername(user);
+    await addUser(user);
+    await addTips(user);
+  }
+
+  const promises = [];
+  users.forEach((user) => promises.push(createCollection(user)));
+  Promise.all(promises).then(() => seedSuccess());
+};
 
 const createNewFirebaseUser = () => {
   const randomUser = () => {
@@ -105,16 +111,7 @@ const createNewFirebaseUser = () => {
   });
 };
 
-const createCollections = (users) => {
-  const promises = [];
-  users.forEach((user) => promises.push(createCollection(user)));
-  Promise.all(promises).then(() => {
-    console.log("Finished seeding");
-    process.exit();
-  });
-};
-
-const firebaseSeed = (userAmount) => {
+const seed = (userAmount) => {
   const promises = [];
 
   for (let i = 0; i < userAmount; ++i) {
@@ -126,9 +123,14 @@ const firebaseSeed = (userAmount) => {
     .catch((error) => seedError(error));
 };
 
+const seedSuccess = () => {
+  console.log("Finished seeding");
+  process.exit();
+};
+
 const seedError = (error) => {
   console.log("A error occured", error);
   process.exit();
 };
 
-firebaseSeed(1);
+seed(5);
