@@ -15,6 +15,7 @@
       :is-modal-visible="showEditModal"
       :tip="selectedTip"
       v-on:close="closeEditModal()"
+      hasForm
     />
     <DeleteTip
       :is-modal-visible="showDeleteModal"
@@ -42,18 +43,18 @@ export default {
   },
   data() {
     return {
-      selectedTip: null,
+      selectedTip: {},
       showEditModal: false,
       showDeleteModal: false,
     };
   },
   methods: {
     closeEditModal() {
-      this.selectedTip = null;
+      this.selectedTip = {};
       this.showEditModal = false;
     },
     closeDeleteModal() {
-      this.selectedTip = null;
+      this.selectedTip = {};
       this.showDeleteModal = false;
     },
     deleteTip(tip) {

@@ -1,7 +1,12 @@
 <template>
   <div>
     <Button @click="showModal()">Delete my profile</Button>
-    <Modal v-show="isModalVisible" @close="closeModal" title="Confirm change">
+    <Modal
+      v-show="isModalVisible"
+      @close="closeModal"
+      title="Confirm change"
+      hasForm
+    >
       <template v-slot:body>
         <p>
           We need to be sure you are actually the owner of the account. Please

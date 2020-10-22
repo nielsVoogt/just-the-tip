@@ -20,7 +20,8 @@
             <XIcon />
           </button>
         </header>
-        <form ref="modalForm">
+        <!-- FORM - CLEARS FORM ON CLOSE -->
+        <form ref="modalForm" v-if="hasForm">
           <section class="modal-body" id="modalDescription">
             <slot name="body" />
           </section>
@@ -35,6 +36,22 @@
             <slot name="footer-buttons" />
           </footer>
         </form>
+        <!-- NOT A FORM - BASICLY A DIALOG -->
+        <template v-else>
+          <section class="modal-body" id="modalDescription">
+            <slot name="body" />
+          </section>
+          <footer class="modal-footer">
+            <Button
+              class="modal-cancel-button"
+              aria-label="Close modal"
+              @click="close()"
+              type="button"
+              >Cancel</Button
+            >
+            <slot name="footer-buttons" />
+          </footer>
+        </template>
       </div>
     </div>
   </transition>
@@ -55,11 +72,14 @@ export default {
       type: String,
       required: true,
     },
+    hasForm: {
+      type: Boolean,
+    },
   },
   methods: {
     close() {
       this.$emit("close");
-      setTimeout(() => this.$refs.modalForm.reset(), 200);
+      if (this.hasForm) setTimeout(() => this.$refs.modalForm.reset(), 200);
     },
   },
 };

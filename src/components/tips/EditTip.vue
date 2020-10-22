@@ -3,25 +3,55 @@
     <template v-slot:body>
       <p>
         EDIT TIP!!!!!
-        {{ tip }}
       </p>
+      <Input
+        type="text"
+        label="Title"
+        placeholder="Your tips title"
+        v-model="tipCopy.title"
+        :error="fieldErrors.title"
+        @change="fieldErrors.title = ''"
+      />
     </template>
   </Modal>
 </template>
 
 <script>
 import Modal from "@/components/ui/Modal";
+import Input from "@/components/ui/Input";
 
 export default {
   name: "EditTip",
-  props: ["isModalVisible", "tip"],
+  props: {
+    isModalVisible: {
+      type: Boolean,
+      required: true,
+    },
+    tip: {
+      type: Object,
+    },
+  },
+  components: {
+    Modal,
+    Input,
+  },
   computed: {
     modalVisibile() {
       return this.isModalVisible;
     },
   },
-  components: {
-    Modal,
+  data() {
+    return {
+      tipCopy: {},
+      fieldErrors: {
+        title: "",
+      },
+    };
+  },
+  watch: {
+    tip() {
+      this.tipCopy = Object.assign({}, this.tip.content);
+    },
   },
   methods: {
     closeModal() {
