@@ -3,7 +3,11 @@
     <button @click="show = !show" type="button" class="options-menu-button">
       Options
     </button>
-    <div :class="{ 'options-menu-list--show': show }" class="options-menu-list">
+    <div
+      :class="{ 'options-menu-list--show': show }"
+      class="options-menu-list"
+      @click="clickDetected()"
+    >
       <slot />
     </div>
   </div>
@@ -19,6 +23,9 @@ export default {
     };
   },
   methods: {
+    clickDetected() {
+      this.show = false;
+    },
     mouseLeave() {
       this.timeOut = setTimeout(() => {
         this.show = false;

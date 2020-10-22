@@ -4,7 +4,7 @@
     <div v-if="loading">...loading</div>
     <div v-else>
       {{ this.username }}
-      <Tip v-for="tip in tips" :key="tip.id" :tip="tip.content" :id="tip.id" />
+      <Tip v-for="tip in tips" :key="tip.id" :tip="tip.content" />
     </div>
   </div>
 </template>

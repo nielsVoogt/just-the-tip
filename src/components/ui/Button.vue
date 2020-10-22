@@ -6,6 +6,7 @@
       `btn--${color}`,
       { 'btn--full': fullWidth },
     ]"
+    v-on="$listeners"
   >
     <slot />
   </button>

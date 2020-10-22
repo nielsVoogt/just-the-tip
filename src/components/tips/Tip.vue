@@ -3,12 +3,11 @@
     <h2>{{ tip.title }}</h2>
     <p>{{ tip.description }}</p>
     <p>{{ tip.url }}</p>
+    <div>{{ tip.category }}</div>
 
     <OptionsMenu v-if="showOptions">
-      <ul>
-        <li>Option</li>
-        <li>Option</li>
-      </ul>
+      <button @click="editTip()">Edit</button>
+      <button @click="deleteTip()">Delete</button>
     </OptionsMenu>
   </div>
 </template>
@@ -22,10 +21,6 @@ export default {
     OptionsMenu,
   },
   props: {
-    id: {
-      type: String,
-      required: true,
-    },
     tip: {
       type: Object,
       required: true,
@@ -33,6 +28,14 @@ export default {
     showOptions: {
       type: Boolean,
       required: false,
+    },
+  },
+  methods: {
+    editTip() {
+      this.$emit("edit");
+    },
+    deleteTip() {
+      this.$emit("delete");
     },
   },
 };

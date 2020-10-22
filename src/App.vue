@@ -42,12 +42,4 @@ a {
 small {
   font-size: 0.875rem;
 }
-
-form {
-  margin-top: 1.75em;
-
-  button[type="submit"] {
-    margin-top: 0.75em;
-  }
-}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is Settings</h1>
+    <h1>This is Settings {{ getUser.displayName }}</h1>
     <DeleteAccount />
     <EmailAdress />
   </div>
