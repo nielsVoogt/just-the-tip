@@ -108,7 +108,7 @@ export default {
 
 <style scoped lang="scss">
 .form-group {
-  margin-bottom: 1em;
+  margin-top: 1em;
   display: block;
 
   &--error .form-group-input {

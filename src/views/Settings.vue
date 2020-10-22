@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is Settings</h1>
+    <h1>This is Settings {{ getUser.displayName }}</h1>
     <DeleteAccount />
     <EmailAdress />
   </div>
@@ -8,8 +8,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import DeleteAccount from "@/components/DeleteAccount";
-import EmailAdress from "@/components/EmailAdress";
+import DeleteAccount from "@/components/settings/DeleteAccount";
+import EmailAdress from "@/components/settings/EmailAdress";
 
 export default {
   name: "Settings",

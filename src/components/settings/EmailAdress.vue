@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import reAuthenticateUser from "../firebaseUtils/reAuthenticateUser";
+import reAuthenticateUser from "@/firebaseUtils/reAuthenticateUser";
 const fb = require("@/firebaseConfig.js");
 
 export default {
@@ -44,11 +44,9 @@ export default {
       this.password = "";
     },
 
-    validateChangeEmailAdressRequest() {
-      // @todo: do validation on emailField
+    validateProfileChange() {
       reAuthenticateUser(this.password)
         .then(() => {
-          // console.log(user);
           this.changeEmailAdress();
         })
         .catch((error) => {
