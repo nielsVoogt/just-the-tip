@@ -51,7 +51,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import FormError from "@/components/ui/FormError";
 import { mapGetters, mapActions } from "vuex";
-import createUserCollections from "../../firebaseUtils/createUserCollections.js";
+import createUserCollections from "../../utils/createUserCollections.js";
 import Spinner from "@/components/ui/Spinner";
 
 const fb = require("@/firebaseConfig.js");

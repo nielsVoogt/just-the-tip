@@ -11,25 +11,26 @@
 
     <form @submit.prevent="validate()" novalidate>
       <small v-if="error">{{ error }}</small>
+      <fieldset>
+        <Input
+          type="email"
+          label="Email"
+          placeholder="e.g. niels@company.nl"
+          v-model="email"
+          :error="fieldErrors.email"
+          @blur="validateEmailAdress()"
+          @change="fieldErrors.email = ''"
+        />
 
-      <Input
-        type="email"
-        label="Email"
-        placeholder="e.g. niels@company.nl"
-        v-model="email"
-        :error="fieldErrors.email"
-        @blur="validateEmailAdress()"
-        @change="fieldErrors.email = ''"
-      />
-
-      <Input
-        type="password"
-        label="Password"
-        placeholder="Your password"
-        v-model="password"
-        :error="fieldErrors.password"
-        @change="fieldErrors.password = ''"
-      />
+        <Input
+          type="password"
+          label="Password"
+          placeholder="Your password"
+          v-model="password"
+          :error="fieldErrors.password"
+          @change="fieldErrors.password = ''"
+        />
+      </fieldset>
 
       <div v-if="requestEmailValidation" style="border:2px solid red;">
         <h1>You haven't validated your email yet</h1>

@@ -1,6 +1,6 @@
 const fb = require("@/firebaseConfig.js");
 
-import getTips from "@/firebaseUtils/getTips";
+import getTips from "@/utils/getTips";
 
 const actions = {
   deleteAccountAction({ commit }, payload) {

@@ -20,7 +20,7 @@ const initialState = () => {
     user: null,
     error: null,
     userProfile: null,
-    userTips: null,
+    userTips: [],
   };
 };
 

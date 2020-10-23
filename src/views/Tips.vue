@@ -12,9 +12,9 @@
 <script>
 import { db } from "@/firebaseConfig.js";
 import Tip from "@/components/tips/Tip";
-import getUidFromSlug from "@/firebaseUtils/getUidFromSlug";
-import getTips from "@/firebaseUtils/getTips";
-import getUserProfile from "@/firebaseUtils/getUserProfile";
+import getUidFromSlug from "@/utils/getUidFromSlug";
+import getTips from "@/utils/getTips";
+import getUserProfile from "@/utils/getUserProfile";
 
 export default {
   name: "Tips",

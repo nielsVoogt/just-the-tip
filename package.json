@@ -7,8 +7,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "seed": "node ./src/firebaseUtils/seed.js",
-    "reset": "node ./src/firebaseUtils/reset.js"
+    "seed": "node ./src/utils/seed.js",
+    "reset": "node ./src/utils/reset.js"
   },
   "dependencies": {
     "animejs": "^3.2.1",

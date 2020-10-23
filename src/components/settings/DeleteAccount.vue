@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import reAuthenticateUser from "@/firebaseUtils/reAuthenticateUser";
+import reAuthenticateUser from "@/utils/reAuthenticateUser";
 import { required, minLength } from "vuelidate/lib/validators";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";

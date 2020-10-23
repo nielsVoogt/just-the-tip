@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import reAuthenticateUser from "@/firebaseUtils/reAuthenticateUser";
+import reAuthenticateUser from "@/utils/reAuthenticateUser";
 const fb = require("@/firebaseConfig.js");
 
 export default {
