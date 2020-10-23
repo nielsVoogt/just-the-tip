@@ -1,15 +1,13 @@
 <template>
   <div>
-    <h1>
-      These are my Tips.
-    </h1>
+    <h1>These are my Tips.</h1>
     <Input
       type="search"
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
     <div>
-      <button @click="selectedCategory = false">All</button>
+      <button @click="selectedCategory = 'ALL'">All</button>
       <button
         v-for="(category, index) in categories"
         :key="`category-${index}`"
@@ -26,7 +24,7 @@
       v-on:delete="deleteTip(tip)"
       v-on:edit="editTip(tip)"
       v-show="
-        selectedCategory === false || tip.content.category === selectedCategory
+        selectedCategory === 'ALL' || tip.content.category === selectedCategory
       "
     />
     <div v-if="noResults">
@@ -78,7 +76,7 @@ export default {
       showEditModal: false,
       showDeleteModal: false,
       categories: [],
-      selectedCategory: false,
+      selectedCategory: "ALL",
     };
   },
   watch: {
@@ -86,11 +84,9 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
-          let categories = [];
-          val.forEach((element) => {
-            categories.push(element.content.category);
-          });
-          this.categories = Array.from(new Set(categories));
+          this.categories = Array.from(
+            new Set(val.map((element) => element.content.category))
+          );
         }
 
         this.noResults = !val.length;
