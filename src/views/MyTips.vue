@@ -8,6 +8,16 @@
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
+    <div>
+      <button @click="selectedCategory = false">All</button>
+      <button
+        v-for="(category, index) in categories"
+        :key="`category-${index}`"
+        @click="selectedCategory = category"
+      >
+        {{ category }}
+      </button>
+    </div>
     <Tip
       v-for="tip in filteredTips"
       :key="tip.id"
@@ -15,6 +25,9 @@
       showOptions
       v-on:delete="deleteTip(tip)"
       v-on:edit="editTip(tip)"
+      v-show="
+        selectedCategory === false || tip.content.category === selectedCategory
+      "
     />
     <div v-if="noResults">
       No results
@@ -52,7 +65,7 @@ export default {
     ...mapGetters(["getUserProfile", "getUserTips"]),
     filteredTips() {
       const self = this;
-      return this.getUserTips.filter(function(tip) {
+      return this.getUserTips.filter((tip) => {
         return tip.content.title.indexOf(self.searchQuery) !== -1;
       });
     },
@@ -64,11 +77,24 @@ export default {
       selectedTip: {},
       showEditModal: false,
       showDeleteModal: false,
+      categories: [],
+      selectedCategory: false,
     };
   },
   watch: {
-    filteredTips(val) {
-      this.noResults = !val.length;
+    filteredTips: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          let categories = [];
+          val.forEach((element) => {
+            categories.push(element.content.category);
+          });
+          this.categories = Array.from(new Set(categories));
+        }
+
+        this.noResults = !val.length;
+      },
     },
   },
   methods: {

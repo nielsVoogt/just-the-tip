@@ -7,7 +7,7 @@ export default function getUidFromSlug(slug) {
       if (doc.exists) {
         resolve(doc.data().uid);
       } else {
-        reject("NO SUCH DOCUMENT");
+        reject();
       }
     });
   });

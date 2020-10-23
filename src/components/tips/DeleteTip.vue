@@ -5,11 +5,17 @@
         Are you sure you want to delete <strong>{{ tipCopy.title }}</strong>
       </p>
     </template>
+    <template v-slot:footer-buttons>
+      <Button type="button" @click.prevent="confirmDelete()"
+        >Yes, delete this tip</Button
+      >
+    </template>
   </Modal>
 </template>
 
 <script>
 import Modal from "@/components/ui/Modal";
+import Button from "@/components/ui/Button";
 
 export default {
   name: "DeleteTip",
@@ -34,6 +40,7 @@ export default {
   },
   components: {
     Modal,
+    Button,
   },
   watch: {
     tip(val) {
@@ -43,6 +50,9 @@ export default {
     },
   },
   methods: {
+    confirmDelete() {
+      console.log("Delete this tip yo");
+    },
     closeModal() {
       this.$emit("close");
       setTimeout(() => (this.tipCopy = {}), 200);
