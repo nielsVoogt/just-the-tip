@@ -28,10 +28,10 @@
         @blur="$emit('blur')"
         @focus="$emit('focus')"
         spellcheck="false"
-        v-if="type !== 'textarea'"
+        v-if="type !== 'textarea' && type !== 'select'"
       />
       <textarea
-        v-else
+        v-if="type === 'textarea'"
         v-bind="$attrs"
         v-on="$listeners"
         @input="$emit('update', $event.target.value)"
@@ -43,6 +43,20 @@
         :value="value"
         spellcheck="false"
       />
+
+      <select
+        @change="$emit('update', $event.target.value)"
+        v-if="type === 'select'"
+        class="form-group-select"
+        @blur="$emit('blur')"
+        @focus="$emit('focus')"
+      >
+        <option value="">{{ selectMessage }}</option>
+        <option v-for="(option, index) in selectOptions" :key="index">
+          {{ option }}
+        </option>
+      </select>
+
       <div class="form-group-icon" v-if="type === 'search'">
         <SearchIcon size="1.35x" />
       </div>
@@ -72,6 +86,7 @@ const TYPES = [
   "search",
   "color",
   "textarea",
+  "select",
 ];
 
 export default {
@@ -105,6 +120,14 @@ export default {
     },
     optional: {
       type: Boolean,
+      required: false,
+    },
+    selectOptions: {
+      type: Array,
+      required: false,
+    },
+    selectMessage: {
+      type: String,
       required: false,
     },
     type: {
@@ -145,7 +168,8 @@ export default {
 
   &--error {
     .form-group-input,
-    .form-group-textarea {
+    .form-group-textarea,
+    .form-group-select {
       border-color: red;
 
       &:focus {
@@ -183,7 +207,8 @@ fieldset > * + * {
 }
 
 .form-group-input,
-.form-group-textarea {
+.form-group-textarea,
+.form-group-select {
   width: 100%;
   border: 1px solid #cdcdcd;
   border-radius: 5px;
@@ -192,7 +217,7 @@ fieldset > * + * {
   font-size: inherit;
   padding-left: 1rem;
   padding-right: 1rem;
-  background: #fbfbfb;
+  background-color: #fbfbfb;
 
   &::-webkit-input-placeholder {
     color: #949494;
@@ -210,6 +235,18 @@ fieldset > * + * {
     outline: 0;
     border-color: orange;
   }
+}
+
+.form-group-select {
+  height: 50px;
+  appearance: none;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+      no-repeat;
+  background-position: right 0.75rem top 12px;
 }
 
 .form-group-input {

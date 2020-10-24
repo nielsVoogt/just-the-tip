@@ -90,7 +90,7 @@ const createNewFirebaseUser = () => {
         email: `user${rand}@example.com`,
         emailVerified: true,
         password: "secretPassword",
-        displayName: `JohnDoe${rand}`,
+        displayName: `johndoe${rand}`,
       })
       .then((userRecord) => {
         resolve({

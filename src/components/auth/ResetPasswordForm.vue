@@ -6,15 +6,17 @@
     </p>
 
     <form v-if="!resetPasswordEmailSent" @submit.prevent="validate()">
-      <Input
-        type="email"
-        label="Email"
-        placeholder="e.g. niels@company.nl"
-        v-model="email"
-        :error="fieldErrors.email"
-        @blur="validateEmailAdress()"
-        @change="fieldErrors.email = ''"
-      />
+      <fieldset>
+        <Input
+          type="email"
+          label="Email"
+          placeholder="e.g. niels@company.nl"
+          v-model="email"
+          :error="fieldErrors.email"
+          @blur="validateEmailAdress()"
+          @change="fieldErrors.email = ''"
+        />
+      </fieldset>
 
       <Button type="submit" size="lg" full-width>
         Request password reset

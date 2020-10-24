@@ -17,4 +17,8 @@ export default {
   background: #ededed;
   overflow: auto;
 }
+
+fieldset {
+  margin: 2rem 0;
+}
 </style>

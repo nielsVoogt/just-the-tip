@@ -25,6 +25,7 @@
           v-model="tipCopy.url"
           :error="fieldErrors.url"
           @change="fieldErrors.url = ''"
+          @blur="validateUrl()"
           optional
         />
       </fieldset>
@@ -97,6 +98,11 @@ export default {
     },
   },
   methods: {
+    validateUrl() {
+      if (!this.$v.url.url) {
+        this.fieldErrors.url = "Please enter a valid url";
+      }
+    },
     closeModal() {
       this.$emit("close");
       setTimeout(() => (this.tipCopy = {}), 200);

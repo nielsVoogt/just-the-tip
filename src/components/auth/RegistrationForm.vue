@@ -4,38 +4,41 @@ d<template>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
       tempor incididunt ut labore.
     </p>
+
     <form @submit.prevent="validate()">
+      <fieldset>
+        <Input
+          type="text"
+          label="Username"
+          placeholder="e.g. nielsthedev"
+          v-model="username"
+          v-on:blur="validateUsername()"
+          v-on:change="usernameExists = false"
+          :error="fieldErrors.username"
+          @change="fieldErrors.username = ''"
+        />
+
+        <Input
+          type="email"
+          label="Email"
+          placeholder="e.g. niels@company.nl"
+          v-model="email"
+          :error="fieldErrors.email"
+          v-on:blur="validateEmailAdress()"
+        />
+
+        <Input
+          type="password"
+          label="Password"
+          placeholder="Your password"
+          v-model="password"
+          sublabel="Your password should be at least 6 characters long"
+          :error="fieldErrors.password"
+          v-on:blur="validatePassword()"
+          @change="fieldErrors.password = ''"
+        />
+      </fieldset>
       <FormError v-if="formError" :error="formError" @close="formError = ''" />
-      <Input
-        type="text"
-        label="Username"
-        placeholder="e.g. nielsthedev"
-        v-model="username"
-        v-on:blur="checkIfUserNameIsUnique()"
-        v-on:change="usernameExists = false"
-        :error="fieldErrors.username"
-        @change="fieldErrors.username = ''"
-      />
-
-      <Input
-        type="email"
-        label="Email"
-        placeholder="e.g. niels@company.nl"
-        v-model="email"
-        :error="fieldErrors.email"
-        v-on:blur="validateEmailAdress()"
-      />
-
-      <Input
-        type="password"
-        label="Password"
-        placeholder="Your password"
-        v-model="password"
-        sublabel="Your password should be at least 6 characters long"
-        :error="fieldErrors.password"
-        v-on:blur="validatePassword()"
-        @change="fieldErrors.password = ''"
-      />
 
       <Button type="submit" size="lg" full-width>
         <Spinner v-if="accountSetup" />
@@ -49,7 +52,6 @@ d<template>
 import { required, email, minLength } from "vuelidate/lib/validators";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import FormError from "@/components/ui/FormError";
 import { mapGetters, mapActions } from "vuex";
 import createUserCollections from "../../utils/createUserCollections.js";
 import Spinner from "@/components/ui/Spinner";
@@ -62,7 +64,6 @@ export default {
     Spinner,
     Button,
     Input,
-    FormError,
   },
   data() {
     return {
@@ -92,12 +93,19 @@ export default {
       minLength: minLength(6),
     },
   },
+  watch: {
+    username(name) {
+      if (/\s/.test(name)) {
+        this.fieldErrors.username = "Username can't contain spaces";
+      }
+    },
+  },
   methods: {
     ...mapActions(["logOutAction"]),
-    async checkIfUserNameIsUnique() {
+    async validateUsername() {
       if (this.username !== "") {
         const chosenUsername = await fb.userNamesCollection
-          .doc(this.username)
+          .doc(this.username.toLowerCase())
           .get();
         this.usernameExists = chosenUsername.exists;
       }
@@ -120,10 +128,12 @@ export default {
 
     validate() {
       if (this.$v.$invalid) {
-        if (!this.$v.username.$required) this.fieldErrors.username = true;
-        if (!this.$v.email.$required) this.fieldErrors.email = true;
-        if (!this.$v.password.$required) this.fieldErrors.password = true;
-        this.formError = "Please fill in all fields";
+        if (!this.$v.username.$required)
+          this.fieldErrors.username = "Username can't be empty";
+        if (!this.$v.email.$required)
+          this.fieldErrors.email = "Email can't be empty";
+        if (!this.$v.password.$required)
+          this.fieldErrors.password = "Password can't be empty";
       } else {
         this.signUp();
       }
@@ -134,7 +144,10 @@ export default {
       fb.auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
-          createUserCollections(response.user.uid, this.username).then(() => {
+          createUserCollections(
+            response.user.uid,
+            this.username.toLowerCase()
+          ).then(() => {
             // Unfortunatly Firebase does a automatic login after creation.
             // We block this behaviour by immediatly logging the user out after creation
             this.logOutAction();
@@ -160,3 +173,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

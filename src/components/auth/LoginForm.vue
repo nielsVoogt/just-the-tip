@@ -1,49 +1,53 @@
 <template>
   <div>
-    <p class="mb-1">
-      The easiest way to share tips among your friends! Use your credentials to
-      log in or
-      <router-link :to="{ name: 'Registration' }">
-        click here
-      </router-link>
-      to create a new account!
-    </p>
+    <div v-if="!requestEmailValidation">
+      <p>
+        The easiest way to share tips among your friends! Use your credentials
+        to log in or
+        <router-link :to="{ name: 'Registration' }">
+          click here
+        </router-link>
+        to create a new account!
+      </p>
 
-    <form @submit.prevent="validate()" novalidate>
-      <small v-if="error">{{ error }}</small>
-      <fieldset>
-        <Input
-          type="email"
-          label="Email"
-          placeholder="e.g. niels@company.nl"
-          v-model="email"
-          :error="fieldErrors.email"
-          @blur="validateEmailAdress()"
-          @change="fieldErrors.email = ''"
-        />
+      <form @submit.prevent="validate()" novalidate>
+        <small v-if="error">{{ error }}</small>
+        <fieldset>
+          <Input
+            type="email"
+            label="Email"
+            placeholder="e.g. niels@company.nl"
+            v-model="email"
+            :error="fieldErrors.email"
+            @blur="validateEmailAdress()"
+            @change="fieldErrors.email = ''"
+          />
 
-        <Input
-          type="password"
-          label="Password"
-          placeholder="Your password"
-          v-model="password"
-          :error="fieldErrors.password"
-          @change="fieldErrors.password = ''"
-        />
-      </fieldset>
+          <Input
+            type="password"
+            label="Password"
+            placeholder="Your password"
+            v-model="password"
+            :error="fieldErrors.password"
+            @change="fieldErrors.password = ''"
+          />
+        </fieldset>
 
-      <div v-if="requestEmailValidation" style="border:2px solid red;">
-        <h1>You haven't validated your email yet</h1>
-        <p>
-          We've sent you a email that contains a link to confirm your email
-          adress. You need to confirm your email adress to be able to log in
-        </p>
-      </div>
-
-      <Button type="submit" size="lg" full-width>
-        Login
+        <Button type="submit" size="lg" full-width>
+          Login
+        </Button>
+      </form>
+    </div>
+    <div v-else class="request-email-validation">
+      <h2>You haven't validated your email yet</h2>
+      <p>
+        We've sent you a email that contains a link to confirm your email
+        adress. You need to confirm your email adress to be able to log in
+      </p>
+      <Button size="lg" full-width @click="requestEmailValidation = false">
+        Back to login
       </Button>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -133,3 +137,18 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.request-email-validation {
+  text-align: center;
+  h2 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 1em;
+  }
+
+  p {
+    margin-bottom: 2em;
+  }
+}
+</style>
