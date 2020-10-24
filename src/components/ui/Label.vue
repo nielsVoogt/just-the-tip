@@ -1,5 +1,7 @@
 <template>
-  <div :class="['label', `label--${name}`]">{{ name }}</div>
+  <div :class="['label', `label--${name.toLowerCase()}`]">
+    {{ name }}
+  </div>
 </template>
 
 <script>
