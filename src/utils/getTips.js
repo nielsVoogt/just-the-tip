@@ -4,6 +4,7 @@ export default function getTips(uid) {
   return new Promise((resolve, _reject) => {
     let tips = [];
     db.collection(`tips/${uid}/content`)
+      .orderBy("timestamp", "desc")
       .get()
       .then((snapshot) =>
         snapshot.forEach((doc) => {

@@ -79,7 +79,11 @@ export default {
   methods: {
     close() {
       this.$emit("close");
-      if (this.hasForm) setTimeout(() => this.$refs.modalForm.reset(), 200);
+      if (this.hasForm)
+        setTimeout(() => {
+          this.$refs.modalForm.reset();
+          console.log("I cleared a form");
+        }, 200);
     },
   },
 };

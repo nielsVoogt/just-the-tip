@@ -49,6 +49,7 @@ const addTip = (user) => {
         url: Math.random() >= 0.5 ? "www.google.com" : "",
         likes: Math.random() >= 0.5 ? Math.round(Math.random() * 100) : 0,
         category: categories[Math.floor(Math.random() * categories.length)],
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => {
         resolve();

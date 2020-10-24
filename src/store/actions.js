@@ -18,6 +18,10 @@ const actions = {
     });
   },
 
+  addNewTip({ commit }, tip) {
+    commit("addNewTip", tip);
+  },
+
   async fetchUserData({ commit }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
     userProfile.get().then((doc) => commit("setUserProfile", doc.data()));

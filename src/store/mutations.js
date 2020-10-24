@@ -1,4 +1,7 @@
 const mutations = {
+  addNewTip(state, payload) {
+    state.userTips.unshift(payload);
+  },
   setUserTips(state, payload) {
     state.userTips = payload;
   },

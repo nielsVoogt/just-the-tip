@@ -52,11 +52,14 @@
 </template>
 
 <script>
+import { db, fb } from "@/firebaseConfig.js";
 import { categories } from "@/categories";
 import { required, maxLength, url } from "vuelidate/lib/validators";
+import addTip from "../../utils/addTip.js";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { mapGetters } from "vuex";
 
 export default {
   name: "AddTip",
@@ -127,11 +130,41 @@ export default {
         if (!this.$v.description.$required)
           this.fieldErrors.description = "Description can't be empty";
       } else {
-        this.addTip();
+        this.addNewTip();
       }
     },
-    addTip() {
-      console.log("hello?");
+    addNewTip() {
+      const tip = {
+        category: this.selectedCategory,
+        title: this.title,
+        description: this.description,
+        url: this.url,
+        likes: 0,
+      };
+
+      addTip(tip)
+        .then((tipId) => {
+          this.$store.dispatch("addNewTip", {
+            id: tipId,
+            content: tip,
+          });
+          this.$notificationHub.$emit("add-notification", {
+            message: "Added new tip",
+            type: "default",
+          });
+          this.closeModal();
+          this.clearForm();
+        })
+        .catch((error) => console.log(error));
+    },
+    closeModal() {
+      this.$emit("close");
+    },
+    clearForm() {
+      this.selectedCategory = "";
+      this.title = "";
+      this.description = "";
+      this.url = "";
     },
   },
 };
