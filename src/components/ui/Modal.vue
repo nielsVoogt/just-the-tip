@@ -98,20 +98,24 @@ export default {
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.65);
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 /* MODAL */
 
 .modal {
+  position: absolute;
+  left: 50%;
+  top: 5em;
+  transform: translateX(-50%);
   background: #ffffff;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   overflow-x: auto;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   width: 400px;
   border-radius: 10px;
 
@@ -145,6 +149,10 @@ export default {
   .modal-body {
     position: relative;
     padding: 0 1.5em 1.5em 1.5em;
+
+    fieldset {
+      margin: 0;
+    }
   }
 
   /* FOOTER */

@@ -1,8 +1,8 @@
 <template>
   <div>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore.
+      Please fill in your email adress below. We will send you a email
+      containing a link that allows you to reset your password.
     </p>
 
     <form v-if="!resetPasswordEmailSent" @submit.prevent="validate()">
@@ -19,7 +19,7 @@
       </fieldset>
 
       <Button type="submit" size="lg" full-width>
-        Request password reset
+        Submit
       </Button>
     </form>
 

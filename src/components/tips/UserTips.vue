@@ -14,18 +14,20 @@
         :categories="categories"
         :selected="selectedCategory"
       />
-      <Tip
-        v-for="tip in filteredTips"
-        :key="tip.id"
-        :tip="tip.content"
-        :show-options="showOptions"
-        v-on:delete="deleteTip(tip)"
-        v-on:edit="editTip(tip)"
-        v-show="
-          selectedCategory === 'ALL' ||
-            tip.content.category === selectedCategory
-        "
-      />
+      <div class="tip-container">
+        <Tip
+          v-for="tip in filteredTips"
+          :key="tip.id"
+          :tip="tip.content"
+          :show-options="showOptions"
+          v-on:delete="deleteTip(tip)"
+          v-on:edit="editTip(tip)"
+          v-show="
+            selectedCategory === 'ALL' ||
+              tip.content.category === selectedCategory
+          "
+        />
+      </div>
       <div v-if="noResults">
         No results
       </div>
@@ -144,3 +146,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.tip-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

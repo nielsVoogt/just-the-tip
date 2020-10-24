@@ -52,7 +52,11 @@
         @focus="$emit('focus')"
       >
         <option value="">{{ selectMessage }}</option>
-        <option v-for="(option, index) in selectOptions" :key="index">
+        <option
+          v-for="(option, index) in selectOptions"
+          :key="index"
+          :selected="selectedOption === option"
+        >
           {{ option }}
         </option>
       </select>
@@ -127,6 +131,10 @@ export default {
       required: false,
     },
     selectMessage: {
+      type: String,
+      required: false,
+    },
+    selectedOption: {
       type: String,
       required: false,
     },

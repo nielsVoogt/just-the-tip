@@ -153,18 +153,22 @@ export default {
             type: "default",
           });
           this.closeModal();
-          this.clearForm();
+          this.resetForm();
         })
         .catch((error) => console.log(error));
     },
     closeModal() {
       this.$emit("close");
     },
-    clearForm() {
+    resetForm() {
       this.selectedCategory = "";
       this.title = "";
       this.description = "";
       this.url = "";
+      this.fieldErrors.this.fieldErrors.title = "";
+      this.fieldErrors.description = "";
+      this.fieldErrors.url = "";
+      this.fieldErrors.category = "";
     },
   },
 };

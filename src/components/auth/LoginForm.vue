@@ -4,9 +4,7 @@
       <p>
         The easiest way to share tips among your friends! Use your credentials
         to log in or
-        <router-link :to="{ name: 'Registration' }">
-          click here
-        </router-link>
+        <router-link :to="{ name: 'Registration' }">click here</router-link>
         to create a new account!
       </p>
 

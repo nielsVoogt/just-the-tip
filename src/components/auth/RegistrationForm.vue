@@ -1,8 +1,9 @@
 d<template>
   <div>
-    <p class="mb-1">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore.
+    <p>
+      Please add your details to register your account. Already got a account?
+      <router-link :to="{ name: 'Login' }">Click here</router-link>
+      to login.
     </p>
 
     <form @submit.prevent="validate()">

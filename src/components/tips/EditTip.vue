@@ -19,6 +19,16 @@
           :maxLength="150"
         />
         <Input
+          type="select"
+          label="Category"
+          v-model="tipCopy.category"
+          :select-options="categories"
+          :selected-option="tipCopy.category"
+          selectMessage="Please select a category"
+          :error="fieldErrors.category"
+          @change="fieldErrors.category = ''"
+        />
+        <Input
           type="url"
           label="Url"
           placeholder="http://www.yourtipurl.com"
@@ -37,6 +47,7 @@
 </template>
 
 <script>
+import { categories } from "@/categories";
 import { required, maxLength, url } from "vuelidate/lib/validators";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
@@ -79,11 +90,13 @@ export default {
   },
   data() {
     return {
+      categories,
       tipCopy: {},
       fieldErrors: {
         title: "",
         description: "",
         url: "",
+        category: "",
       },
     };
   },

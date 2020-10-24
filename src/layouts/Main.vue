@@ -1,5 +1,5 @@
 <template>
-  <div id="main">
+  <div class="main">
     <Notifications />
     <Navigation />
     <router-view />
@@ -16,8 +16,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-#main {
-  background: lightblue;
+<style lang="scss">
+body {
+  background: #ededed;
 }
 </style>
