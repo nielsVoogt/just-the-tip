@@ -86,7 +86,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["loginAction"]),
+    ...mapActions(["logInAction"]),
 
     validateEmailAdress() {
       const isEmailValid = this.$v.email.email;
@@ -115,7 +115,7 @@ export default {
     },
 
     login() {
-      this.loginAction({ email: this.email, password: this.password })
+      this.logInAction({ email: this.email, password: this.password })
         .then((response) => {
           console.log("loggedInResponse", response);
           this.$router.push({ name: "MyTips" });

@@ -1,17 +1,17 @@
 const mutations = {
-  addNewTip(state, payload) {
+  ADD_NEW_TIP: (state, payload) => {
     state.userTips.unshift(payload);
   },
-  setUserTips(state, payload) {
+  SET_USER_TIPS: (state, payload) => {
     state.userTips = payload;
   },
-  setUserProfile(state, payload) {
+  SET_USER_PROFILE: (state, payload) => {
     state.userProfile = payload;
   },
-  setUser(state, payload) {
+  SET_USER: (state, payload) => {
     state.user = payload;
   },
-  setError(state, payload) {
+  SET_ERROR: (state, payload) => {
     state.error = payload;
   },
 };

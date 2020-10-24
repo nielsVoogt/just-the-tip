@@ -3,13 +3,13 @@ const fb = require("@/firebaseConfig.js");
 import getTips from "@/utils/getTips";
 
 const actions = {
-  deleteAccountAction({ commit }, payload) {
+  deleteAccountAction: ({ commit }, payload) => {
     const user = payload.user;
     return new Promise((resolve, reject) => {
       user
         .delete()
         .then(() => {
-          commit("setUser", null);
+          commit("SET_USER", null);
           resolve();
         })
         .catch((error) => {
@@ -18,33 +18,33 @@ const actions = {
     });
   },
 
-  addNewTip({ commit }, tip) {
-    commit("addNewTip", tip);
+  addNewTipAction: ({ commit }, tip) => {
+    commit("ADD_NEW_TIP", tip);
   },
 
-  async fetchUserData({ commit }, uid) {
+  async fetchUserDataAction({ commit }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
-    userProfile.get().then((doc) => commit("setUserProfile", doc.data()));
+    userProfile.get().then((doc) => commit("SET_USER_PROFILE", doc.data()));
     const tips = await getTips(uid);
-    commit("setUserTips", tips);
+    commit("SET_USER_TIPS", tips);
   },
 
-  logOutAction({ commit }) {
+  logOutAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       fb.auth
         .signOut()
         .then(() => {
-          commit("setUser", null);
+          commit("SET_USER", null);
           resolve();
         })
         .catch((error) => {
-          commit("setError", error);
+          commit("SET_ERROR", error);
           reject();
         });
     });
   },
 
-  loginAction({ commit, dispatch }, payload) {
+  logInAction: ({ commit, dispatch }, payload) => {
     return new Promise((resolve, reject) => {
       fb.auth
         .signInWithEmailAndPassword(payload.email, payload.password)
@@ -52,8 +52,8 @@ const actions = {
           if (!response.user.emailVerified) {
             reject();
           } else {
-            dispatch("fetchUserData", response.user.uid);
-            commit("setUser", response.user);
+            dispatch("fetchUserDataAction", response.user.uid);
+            commit("SET_USER", response.user);
             resolve(response);
           }
         })

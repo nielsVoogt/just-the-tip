@@ -144,7 +144,7 @@ export default {
 
       addTip(tip)
         .then((tipId) => {
-          this.$store.dispatch("addNewTip", {
+          this.$store.dispatch("addNewTipAction", {
             id: tipId,
             content: tip,
           });

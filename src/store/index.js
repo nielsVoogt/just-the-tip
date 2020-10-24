@@ -10,8 +10,8 @@ Vue.use(Vuex);
 
 fb.auth.onAuthStateChanged((user) => {
   if (user) {
-    store.commit("setUser", user);
-    store.dispatch("fetchUserData", user.uid);
+    store.commit("SET_USER", user);
+    store.dispatch("fetchUserDataAction", user.uid);
   }
 });
 
