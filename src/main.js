@@ -1,6 +1,7 @@
 import App from "./App.vue";
 import Vue from "vue";
 import Vuelidate from "vuelidate";
+import i18n from "./i18n";
 import router from "./router";
 import { store } from "./store";
 
@@ -18,6 +19,7 @@ fb.auth.onAuthStateChanged(() => {
       el: "#app",
       router,
       store,
+      i18n,
       render: (h) => h(App),
     });
   }
