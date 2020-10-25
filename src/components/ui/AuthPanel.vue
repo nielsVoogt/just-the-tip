@@ -1,5 +1,6 @@
 <template>
   <div class="auth-panel-container">
+    <SelectLocale />
     <div class="auth-panel">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +27,13 @@
 </template>
 
 <script>
+import SelectLocale from "@/components/ui/SelectLocale";
+
 export default {
   name: "AuthPanel",
+  components: {
+    SelectLocale,
+  },
 };
 </script>
 

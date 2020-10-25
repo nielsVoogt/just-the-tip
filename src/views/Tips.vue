@@ -3,13 +3,13 @@
     {{ username }}
     <div v-if="userNotFound">UserNotFound</div>
     <div v-if="userNotPublic">User not public</div>
-    <UserTips :tips="tips" :show-options="false" v-if="tips.length" />
+    <TipOverview :tips="tips" :show-options="false" v-if="tips.length" />
   </div>
 </template>
 
 <script>
 import { db } from "@/firebaseConfig.js";
-import UserTips from "@/components/tips/UserTips";
+import TipOverview from "@/components/tips/TipOverview";
 import getUidFromSlug from "@/utils/getUidFromSlug";
 import getTips from "@/utils/getTips";
 import getUserProfile from "@/utils/getUserProfile";
@@ -27,7 +27,7 @@ export default {
     };
   },
   components: {
-    UserTips,
+    TipOverview,
   },
   methods: {
     checkIfProfileIsPublic(uid) {

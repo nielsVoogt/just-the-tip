@@ -1,18 +1,18 @@
 <template>
   <div>
     <h1>These are my Tips.</h1>
-    <UserTips :tips="getUserTips" :show-options="true" />
+    <TipOverview :tips="getUserTips" :show-options="true" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import UserTips from "@/components/tips/UserTips";
+import TipOverview from "@/components/tips/TipOverview";
 
 export default {
   name: "MyTips",
   components: {
-    UserTips,
+    TipOverview,
   },
   computed: {
     ...mapGetters(["getUserProfile", "getUserTips"]),

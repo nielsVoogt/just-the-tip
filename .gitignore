@@ -22,3 +22,5 @@ yarn-error.log*
 *.sw?
 
 serviceAccountKey.json
+.firebase
+firebase-debug.log

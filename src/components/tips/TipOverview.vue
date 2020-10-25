@@ -63,7 +63,7 @@ import AddTip from "@/components/tips/AddTip";
 import Button from "@/components/ui/Button";
 
 export default {
-  name: "UserTips",
+  name: "TipOverview",
   components: {
     DeleteTip,
     EditTip,

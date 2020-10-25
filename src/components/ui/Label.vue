@@ -34,7 +34,7 @@ export default {
     background: #5a97ba;
   }
 
-  &--book {
+  &--documentary {
     background: #e05e5e;
   }
 
