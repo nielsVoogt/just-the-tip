@@ -1,32 +1,31 @@
 <template>
   <div>
-    <Input
-      type="search"
-      placeholder="Search by username"
-      v-model="searchQuery"
-      @change="searchUsernames"
+    <AddNewFriend
+      :is-modal-visible="showAddNewFriendModal"
+      v-on:close="closeAddNewFriendModal()"
     />
+    <button @click="addNewFriend">Add a friend yo</button>
   </div>
 </template>
 
 <script>
-import Input from "@/components/ui/Input";
-
+import AddNewFriend from "@/components/friends/AddNewFriend";
 export default {
   name: "FriendsOverview",
   components: {
-    Input,
+    AddNewFriend,
   },
   data() {
     return {
-      searchQuery: "",
-      searchResultOptions: [],
-      usernameSearchLoading: false,
+      showAddNewFriendModal: false,
     };
   },
   methods: {
-    searchUsernames() {
-      console.log("I'm searching yo");
+    closeAddNewFriendModal() {
+      this.showAddNewFriendModal = false;
+    },
+    addNewFriend() {
+      this.showAddNewFriendModal = true;
     },
   },
 };
