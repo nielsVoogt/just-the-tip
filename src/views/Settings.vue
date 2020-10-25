@@ -20,9 +20,5 @@ export default {
   computed: {
     ...mapGetters(["getUser"]),
   },
-  data() {
-    return {};
-  },
-  methods: {},
 };
 </script>
