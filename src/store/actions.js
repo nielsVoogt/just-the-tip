@@ -1,5 +1,7 @@
 const fb = require("@/firebaseConfig.js");
 
+import * as types from "./mutation-types";
+
 import getTips from "@/utils/getTips";
 
 const actions = {
@@ -9,7 +11,7 @@ const actions = {
       user
         .delete()
         .then(() => {
-          commit("SET_USER", null);
+          commit(types.types.SET_USER, null);
           resolve();
         })
         .catch((error) => {
@@ -19,14 +21,17 @@ const actions = {
   },
 
   addNewTipAction: ({ commit }, tip) => {
-    commit("ADD_NEW_TIP", tip);
+    commit(types.ADD_NEW_TIP, tip);
   },
 
   async fetchUserDataAction({ commit }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
-    userProfile.get().then((doc) => commit("SET_USER_PROFILE", doc.data()));
+    userProfile.get().then((doc) => {
+      commit(types.SET_USER_PROFILE, doc.data());
+    });
+
     const tips = await getTips(uid);
-    commit("SET_USER_TIPS", tips);
+    commit(types.SET_USER_TIPS, tips);
   },
 
   logOutAction: ({ commit }) => {
@@ -34,11 +39,11 @@ const actions = {
       fb.auth
         .signOut()
         .then(() => {
-          commit("SET_USER", null);
+          commit(types.SET_USER, null);
           resolve();
         })
         .catch((error) => {
-          commit("SET_ERROR", error);
+          commit(types.SET_ERROR, error);
           reject();
         });
     });
@@ -53,7 +58,7 @@ const actions = {
             reject();
           } else {
             dispatch("fetchUserDataAction", response.user.uid);
-            commit("SET_USER", response.user);
+            commit(types.SET_USER, response.user);
             resolve(response);
           }
         })
