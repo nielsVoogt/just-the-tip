@@ -1,32 +1,17 @@
 <template>
   <div>
-    <AddNewFriend
-      :is-modal-visible="showAddNewFriendModal"
-      v-on:close="closeAddNewFriendModal()"
-    />
-    <button @click="addNewFriend">Add a friend yo</button>
+    <SearchUsers />
   </div>
 </template>
 
 <script>
-import AddNewFriend from "@/components/friends/AddNewFriend";
+import SearchUsers from "@/components/friends/SearchUsers";
+
 export default {
   name: "FriendsOverview",
   components: {
-    AddNewFriend,
+    SearchUsers,
   },
-  data() {
-    return {
-      showAddNewFriendModal: false,
-    };
-  },
-  methods: {
-    closeAddNewFriendModal() {
-      this.showAddNewFriendModal = false;
-    },
-    addNewFriend() {
-      this.showAddNewFriendModal = true;
-    },
-  },
+  methods: {},
 };
 </script>

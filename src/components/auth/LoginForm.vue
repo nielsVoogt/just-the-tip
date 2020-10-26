@@ -7,7 +7,6 @@
         <router-link :to="{ name: 'Registration' }">click here</router-link>
         to create a new account!
       </p>
-
       <form @submit.prevent="validate()" novalidate>
         <small v-if="error">{{ error }}</small>
         <fieldset>

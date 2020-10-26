@@ -9,7 +9,9 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+const userAmount = 5;
 const categories = ["movie", "documentary", "recipe", "music"];
+const userUidCollection = [];
 
 const addUsername = (user) => {
   return new Promise((resolve, _reject) => {
@@ -21,20 +23,55 @@ const addUsername = (user) => {
   });
 };
 
-const addUser = (user) => {
+const fetchLastTips = (user) => {
+  return new Promise((resolve, _reject) => {
+    db.collection(`tips/${user.uid}/content`)
+      .orderBy("timestamp", "desc")
+      .limit(3)
+      .get()
+      .then((querySnapshot) => {
+        var data = querySnapshot.docs.map(function(documentSnapshot) {
+          return documentSnapshot.data();
+        });
+        resolve(data);
+      });
+  });
+};
+
+const addUser = async (user) => {
+  const lastTips = await fetchLastTips(user);
+  const followers = userUidCollection.filter((id) => id !== user.uid);
+
+  let newFollower = followers.pop();
+  const rand = Math.random() >= 0.5;
+  rand === true ? (newFollower = []) : [newFollower];
+
   return new Promise((resolve, _reject) => {
     db.collection("users")
       .doc(user.uid)
       .set({
         username: user.username,
-        followers: [],
+        newFollowers: newFollower,
+        followers: followers,
         firstLogin: true,
         public: true,
-        tipCount: 0,
+        tipCount: 5,
+        lastTips: lastTips,
       })
       .then(() => resolve())
       .catch((error) => seedError(error));
   });
+};
+
+const likes = () => {
+  const rand = Math.random() >= 0.5;
+  if (!rand) {
+    return userUidCollection
+      .sort(() => Math.random() - Math.random())
+      .slice(0, Math.floor(Math.random() * (userAmount - 1)));
+  } else {
+    return [];
+  }
 };
 
 const addTip = (user) => {
@@ -47,7 +84,7 @@ const addTip = (user) => {
         title: lorem.generateWords(4),
         description: lorem.generateWords(Math.floor(Math.random() * 10) + 3),
         url: Math.random() >= 0.5 ? "www.google.com" : "",
-        likes: Math.random() >= 0.5 ? Math.round(Math.random() * 100) : 0,
+        likes: likes(),
         category: categories[Math.floor(Math.random() * categories.length)],
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       })
@@ -73,8 +110,8 @@ const addTips = (user) => {
 const createCollections = (users) => {
   async function createCollection(user) {
     await addUsername(user);
-    await addUser(user);
     await addTips(user);
+    await addUser(user);
   }
 
   const promises = [];
@@ -94,6 +131,7 @@ const createNewFirebaseUser = () => {
         displayName: `johndoe${rand}`,
       })
       .then((userRecord) => {
+        userUidCollection.push(userRecord.uid);
         resolve({
           uid: userRecord.uid,
           username: userRecord.displayName,
@@ -125,4 +163,4 @@ const seedError = (error) => {
   process.exit();
 };
 
-seed(5);
+seed(userAmount);

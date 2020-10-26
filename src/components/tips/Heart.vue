@@ -24,7 +24,7 @@ export default {
   name: "Heart",
   props: {
     likes: {
-      type: Number,
+      type: Array,
       required: true,
     },
   },

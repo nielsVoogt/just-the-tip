@@ -3,7 +3,7 @@
     {{ username }}
     <div v-if="userNotFound">UserNotFound</div>
     <div v-if="userNotPublic">User not public</div>
-    <TipOverview :tips="tips" :show-options="false" v-if="tips.length" />
+    <TipOverview :tips="tips" :is-owner="false" v-if="tips.length" />
   </div>
 </template>
 

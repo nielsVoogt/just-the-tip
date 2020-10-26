@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>These are my Tips.</h1>
-    <TipOverview :tips="getUserTips" :show-options="true" />
+    <TipOverview :tips="getUserTips" :is-owner="true" />
   </div>
 </template>
 

@@ -6,7 +6,8 @@
       v-model="searchQuery"
     />
 
-    <Button @click="addTip()">Add new tip</Button>
+    <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
+    <Button type="button" v-else @click="addFriend()">Add to friends</Button>
 
     <div v-if="tips.length">
       <Filters
@@ -19,7 +20,7 @@
           v-for="tip in filteredTips"
           :key="tip.id"
           :tip="tip.content"
-          :show-options="showOptions"
+          :show-options="isOwner"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -90,7 +91,7 @@ export default {
       type: Array,
       required: true,
     },
-    showOptions: {
+    isOwner: {
       type: Boolean,
       required: false,
     },
@@ -118,6 +119,9 @@ export default {
     },
   },
   methods: {
+    addFriend() {
+      console.log("Trying to add a friend");
+    },
     selectCategory(payload) {
       this.selectedCategory = payload;
     },
