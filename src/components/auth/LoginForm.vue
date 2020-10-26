@@ -68,6 +68,7 @@ export default {
       password: "",
       error: false,
       requestEmailValidation: false,
+      indexName: process.env.VUE_APP_ALGOLIA_USERINDEX,
       fieldErrors: {
         email: "",
         password: "",

@@ -4,18 +4,21 @@
   "author": "Niels Voogt <n.voogt@gmail.com",
   "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "setup": "npm install && cd ./functions && npm install && npm install -g firebase-tools",
+    "serve": "vue-cli-service serve --mode development",
+    "build:dev": "vue-cli-service build --mode development",
+    "build:prod": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
     "seed": "node ./src/utils/seedUsersAndCollections.js",
     "reset": "node ./src/utils/deleteAllUsers.js",
-    "test": "jest"
+    "test": "jest",
+    "deploy:prod": "npm run build:prod && firebase use prod && firebase deploy",
+    "deploy:dev": "npm run build:dev && firebase use dev && firebase deploy"
   },
   "dependencies": {
     "@vue/cli-plugin-unit-jest": "^4.5.8",
     "@vue/test-utils": "^1.1.0",
     "algoliasearch": "^4.5.1",
-    "animejs": "^3.2.1",
     "core-js": "^3.6.4",
     "firebase": "^7.24.0",
     "firebase-admin": "^9.3.0",

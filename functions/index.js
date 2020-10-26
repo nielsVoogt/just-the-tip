@@ -8,7 +8,9 @@ const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
 
 const algoliaClient = algoliaSearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
-const algoliaIndex = algoliaClient.initIndex("users");
+const algoliaIndex = algoliaClient.initIndex(
+  functions.config().algolia.init_index
+);
 
 // The Firebase Admin SDK to access Cloud Firestore.
 admin.initializeApp();

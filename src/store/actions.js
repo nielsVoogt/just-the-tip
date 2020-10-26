@@ -1,6 +1,6 @@
 const fb = require("@/firebaseConfig.js");
 
-import * as types from "./mutation-types";
+import * as types from "./mutation-types.js";
 
 import getTips from "@/utils/getTips";
 
@@ -11,7 +11,7 @@ const actions = {
       user
         .delete()
         .then(() => {
-          commit(types.types.SET_USER, null);
+          commit(types.SET_USER, null);
           resolve();
         })
         .catch((error) => {
