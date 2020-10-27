@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { fb } from "@/firebaseConfig.js";
 import reAuthenticateUser from "@/utils/reAuthenticateUser";
 import { required, minLength } from "vuelidate/lib/validators";
 import Modal from "@/components/ui/Modal";
@@ -68,32 +69,52 @@ export default {
     showModal() {
       this.isModalVisible = true;
     },
+
     closeModal() {
       this.isModalVisible = false;
+      this.fieldErrors.password = "";
+      this.password = "";
     },
+
     validate() {
-      if (!this.$v.password.$required || this.$v.password.minLength) {
+      // Validate the password field
+      if (this.$v.$invalid) {
         if (!this.$v.password.$required) {
           this.fieldErrors.password = true;
-          return false;
+          return;
         }
         if (!this.$v.password.minLength) {
           this.fieldErrors.password =
             "The password is not long enough, a minimum of 6 characters is required.";
-          return false;
+          return;
         }
-      } else {
-        this.deleteAccount();
       }
-    },
 
-    deleteAccount() {
+      // If valid, reauthenticate user and call deletion function
       reAuthenticateUser(this.password)
-        .then((user) => this.deleteUser(user))
+        .then(() => this.deleteUser())
         .catch((error) => {
           error.code === "auth/wrong-password"
             ? this.passwordIncorrect()
             : console.error(error);
+        });
+    },
+
+    passwordIncorrect() {
+      this.fieldErrors.password =
+        "The password is invalid, please enter your password again.";
+      this.password = "";
+    },
+
+    deleteUser() {
+      const user = fb.auth().currentUser;
+      user
+        .delete()
+        .then(() => {
+          console.log("Delete succesful");
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

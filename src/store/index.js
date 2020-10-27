@@ -9,6 +9,7 @@ import mutations from "./mutations";
 Vue.use(Vuex);
 
 fb.auth.onAuthStateChanged((user) => {
+  console.log("onAuthChanged fired in store", user);
   if (user) {
     store.commit("SET_USER", user);
     store.dispatch("fetchUserDataAction", user.uid);

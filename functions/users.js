@@ -14,31 +14,15 @@ const algoliaIndex = algoliaClient.initIndex(
   functions.config().algolia.init_index
 );
 
-exports.onUserCreated = functions.firestore
-  .document("/users/{uid}")
-  .onCreate((snapshot) => {
-    const userName = snapshot.data().username;
-    const algoliaObjectId = snapshot.id;
-    return algoliaIndex.saveObject({
-      userName,
-      objectID: algoliaObjectId,
-    });
+exports.onUserCreated = functions.auth.user().onCreate((user) => {
+  const userName = user.data.displayName;
+  const algoliaObjectId = snapshot.id;
+  return algoliaIndex.saveObject({
+    userName,
+    objectID: algoliaObjectId,
   });
+});
 
-exports.onUserDelete = functions.firestore
-  .document("/users/{uid}")
-  .onDelete(async (snapshot) => {
-    await admin
-      .firestore()
-      .collection("tips")
-      .doc(snapshot.id)
-      .delete();
-
-    await admin
-      .firestore()
-      .collection("usernames")
-      .doc(snapshot.data().username)
-      .delete();
-
-    algoliaIndex.deleteObject(snapshot.id);
-  });
+exports.onUserDelete = functions.auth.user().onDelete((user) => {
+  return algoliaIndex.deleteObject(user.uid);
+});
