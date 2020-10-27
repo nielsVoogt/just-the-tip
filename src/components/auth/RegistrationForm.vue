@@ -154,7 +154,7 @@ export default {
             this.logOutAction();
             response.user
               .sendEmailVerification({
-                url: "http://localhost:8080/login",
+                url: `${process.env.VUE_APP_URL}/login`,
                 handleCodeInApp: false,
               })
               .then(() => {

@@ -16,7 +16,7 @@
       </a>
     </div>
 
-    <OptionsMenu v-if="showOptions">
+    <OptionsMenu v-if="isOwner">
       <button @click="editTip()" class="options-menu-item">
         <EditIcon size="1x" />
         Edit tip
@@ -29,7 +29,7 @@
 
     <div class="tip-footer">
       <Label :name="tip.category" />
-      <Heart :likes="tip.likes" />
+      <Heart :likes="tip.likes" :allow-interaction="isOwner" />
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
       type: Object,
       required: true,
     },
-    showOptions: {
+    isOwner: {
       type: Boolean,
       required: false,
     },

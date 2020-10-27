@@ -1,6 +1,21 @@
 <template>
-  <div :class="['heart', { 'heart--has-likes': likes !== 0 }]">
-    {{ likes }}
+  <div
+    :class="[
+      'heart',
+      {
+        'heart--has-likes': likes.length !== 0,
+        'heart--blocked': allowInteraction,
+      },
+    ]"
+  >
+    <div class="heart-counter">
+      <div class="heart-counter-current">
+        {{ likes.length }}
+      </div>
+      <div class="heart-counter-hover">
+        {{ likes.length + 1 }}
+      </div>
+    </div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -27,6 +42,10 @@ export default {
       type: Array,
       required: true,
     },
+    allowInteraction: {
+      type: Boolean,
+      required: true,
+    },
   },
 };
 </script>
@@ -38,7 +57,33 @@ export default {
   color: #dbdbdb;
   font-weight: 500;
 
+  .heart-counter {
+    overflow: hidden;
+    height: 24px;
+
+    .heart-counter-current,
+    .heart-counter-hover {
+      transition: transform 0.3s ease-out;
+    }
+  }
+
+  &:hover {
+    color: #9a9a9a;
+
+    .heart-counter-current,
+    .heart-counter-hover {
+      transform: translateY(-100%);
+    }
+
+    svg {
+      transform: scale(1.15);
+      fill: #ff3c3c;
+      stroke: #ff3c3c;
+    }
+  }
+
   svg {
+    transition: transform 0.3s ease-out;
     margin-left: 0.5em;
     cursor: pointer;
   }
@@ -50,6 +95,10 @@ export default {
       fill: #ff3c3c;
       stroke: #ff3c3c;
     }
+  }
+
+  &--blocked {
+    pointer-events: none;
   }
 }
 </style>

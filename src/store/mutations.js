@@ -1,6 +1,7 @@
 import {
   ADD_NEW_TIP,
   SET_ERROR,
+  SET_FOLLOWING,
   SET_USER,
   SET_USER_PROFILE,
   SET_USER_TIPS,
@@ -20,6 +21,9 @@ const mutations = {
     state.user = payload;
   },
   [SET_ERROR](state, payload) {
+    state.error = payload;
+  },
+  [SET_FOLLOWING](state, payload) {
     state.error = payload;
   },
 };

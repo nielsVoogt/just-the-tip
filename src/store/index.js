@@ -21,6 +21,7 @@ const initialState = () => {
     error: null,
     userProfile: null,
     userTips: [],
+    following: null,
   };
 };
 

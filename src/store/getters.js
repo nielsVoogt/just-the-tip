@@ -8,6 +8,12 @@ const getters = {
   getUserTips(state) {
     return state.userTips;
   },
+  getFollowing(state) {
+    return state.following;
+  },
+  getFollowers(state) {
+    return state.userProfile.followers;
+  },
   isUserAuth(state) {
     return !!state.user;
   },

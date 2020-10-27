@@ -135,37 +135,47 @@ export default {
     },
     addNewTip() {
       const tip = {
-        category: this.selectedCategory,
         title: this.title,
         description: this.description,
         url: this.url,
-        likes: 0,
+        category: this.selectedCategory,
+        likes: [],
       };
 
       addTip(tip)
         .then((tipId) => {
+          // Add the tip to vuex store
           this.$store.dispatch("addNewTipAction", {
             id: tipId,
             content: tip,
           });
+
+          // Notify the user of the great success
           this.$notificationHub.$emit("add-notification", {
             message: "Added new tip",
             type: "default",
           });
+
+          // UI reset
           this.closeModal();
           this.resetForm();
         })
         .catch((error) => console.log(error));
     },
+
     closeModal() {
       this.$emit("close");
     },
+
     resetForm() {
+      // Clear all form values
       this.selectedCategory = "";
       this.title = "";
       this.description = "";
       this.url = "";
-      this.fieldErrors.this.fieldErrors.title = "";
+
+      // Clear all possible form errors
+      this.fieldErrors.title = "";
       this.fieldErrors.description = "";
       this.fieldErrors.url = "";
       this.fieldErrors.category = "";

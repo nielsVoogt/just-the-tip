@@ -20,7 +20,7 @@
           v-for="tip in filteredTips"
           :key="tip.id"
           :tip="tip.content"
-          :show-options="isOwner"
+          :is-owner="isOwner"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="

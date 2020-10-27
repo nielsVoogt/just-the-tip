@@ -3,6 +3,7 @@ const fb = require("@/firebaseConfig.js");
 import * as types from "./mutation-types.js";
 
 import getTips from "@/utils/getTips";
+import getUserProfile from "@/utils/getUserProfile";
 
 const actions = {
   deleteAccountAction: ({ commit }, payload) => {
@@ -24,14 +25,29 @@ const actions = {
     commit(types.ADD_NEW_TIP, tip);
   },
 
-  async fetchUserDataAction({ commit }, uid) {
+  async fetchUserDataAction({ commit, dispatch }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
     userProfile.get().then((doc) => {
       commit(types.SET_USER_PROFILE, doc.data());
     });
 
+    dispatch("fetchUserTipsAction", uid);
+  },
+
+  async fetchUserTipsAction({ commit }, uid) {
     const tips = await getTips(uid);
     commit(types.SET_USER_TIPS, tips);
+  },
+
+  fetchFollowingAction({ commit, getters }) {
+    let promises = [];
+    getters.getFollowers.forEach((followerUid) =>
+      promises.push(getUserProfile(followerUid, true))
+    );
+
+    Promise.all(promises).then((followersData) => {
+      commit(types.SET_FOLLOWING, followersData);
+    });
   },
 
   logOutAction: ({ commit }) => {
