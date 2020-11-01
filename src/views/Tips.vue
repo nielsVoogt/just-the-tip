@@ -1,9 +1,15 @@
 <template>
   <div>
-    {{ username }}
+    {{ username }} {{ uid }}
     <div v-if="userNotFound">UserNotFound</div>
     <div v-if="userNotPublic">User not public</div>
-    <TipOverview :tips="tips" :is-owner="false" v-if="tips.length" />
+    <TipOverview
+      :tips="tips"
+      :is-owner="false"
+      v-if="tips.length"
+      :uid="uid"
+      :slug="username"
+    />
   </div>
 </template>
 
@@ -24,6 +30,7 @@ export default {
       userNotFound: false,
       userNotPublic: false,
       tips: [],
+      uid: false,
     };
   },
   components: {
@@ -34,6 +41,7 @@ export default {
       const self = this;
       getUserProfile(uid).then((user) => {
         if (user.public) {
+          this.uid = uid;
           getTips(uid).then((tips) => {
             this.tips = tips;
           });

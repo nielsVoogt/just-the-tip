@@ -39,15 +39,19 @@ const actions = {
     commit(types.SET_USER_TIPS, tips);
   },
 
-  fetchFollowingAction({ commit, getters }) {
+  fetchFriends({ commit, state }) {
     let promises = [];
-    getters.getFollowers.forEach((followerUid) =>
-      promises.push(getUserProfile(followerUid, true))
-    );
+    const following = state.userProfile.following;
 
-    Promise.all(promises).then((followersData) => {
-      commit(types.SET_FOLLOWING, followersData);
-    });
+    if (following.length) {
+      following.forEach((followerUid) =>
+        promises.push(getUserProfile(followerUid, true))
+      );
+
+      Promise.all(promises).then((followersData) => {
+        commit(types.SET_FRIENDS, followersData);
+      });
+    }
   },
 
   logOutAction: ({ commit }) => {

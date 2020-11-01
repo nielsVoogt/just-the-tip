@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>This is Settings {{ getUser ? getUser.displayName : "" }}</h1>
+    <h1>This is Settings {{ user ? user.displayName : "" }}</h1>
     <DeleteAccount />
     <EmailAdress />
   </div>
@@ -18,7 +18,7 @@ export default {
     EmailAdress,
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["user"]),
   },
 };
 </script>

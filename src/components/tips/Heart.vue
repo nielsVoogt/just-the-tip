@@ -4,7 +4,7 @@
       'heart',
       {
         'heart--has-likes': likes.length !== 0,
-        'heart--blocked': allowInteraction,
+        'heart--blocked': allowInteraction === false,
       },
     ]"
   >

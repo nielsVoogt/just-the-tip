@@ -1,18 +1,25 @@
 const getters = {
-  getUser(state) {
+  user(state) {
     return state.user;
   },
-  getUserProfile(state) {
+  userProfile(state) {
     return state.userProfile;
   },
-  getUserTips(state) {
+  userTips(state) {
     return state.userTips;
   },
-  getFollowing(state) {
-    return state.following;
+  friends(state) {
+    return state.friends;
   },
-  getFollowers(state) {
-    return state.userProfile.followers;
+  followers(state) {
+    if (state.userProfile) {
+      return state.userProfile.followers;
+    }
+  },
+  newFollowers(state) {
+    if (state.userProfile) {
+      return state.userProfile.newFollowers;
+    }
   },
   isUserAuth(state) {
     return !!state.user;

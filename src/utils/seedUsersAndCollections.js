@@ -10,7 +10,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 const tipCount = 5;
-const userAmount = 2;
+const userAmount = 5;
 const categories = ["movie", "documentary", "recipe", "book"];
 const userUidCollection = [];
 const usernamesCollection = [];
@@ -26,8 +26,8 @@ const addUsername = (user) => {
 };
 
 const addUser = async (user) => {
-  const followers = userUidCollection.filter((id) => id !== user.uid);
-  let newFollower = followers.pop();
+  const following = userUidCollection.filter((id) => id !== user.uid);
+  let newFollower = following.pop();
   const rand = Math.random() >= 0.5;
   rand === true ? (newFollower = []) : [newFollower];
 
@@ -37,7 +37,7 @@ const addUser = async (user) => {
       .set({
         username: user.username,
         newFollowers: newFollower,
-        followers: followers,
+        following: following,
         firstLogin: true,
         public: true,
         tipCount: tipCount,

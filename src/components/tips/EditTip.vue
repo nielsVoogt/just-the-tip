@@ -31,7 +31,7 @@
         <Input
           type="url"
           label="Url"
-          placeholder="http://www.yourtipurl.com"
+          placeholder="http://www.your-tip-url.com"
           v-model="tipCopy.url"
           :error="fieldErrors.url"
           @change="fieldErrors.url = ''"
@@ -49,6 +49,7 @@
 <script>
 import { categories } from "@/categories";
 import { required, maxLength, url } from "vuelidate/lib/validators";
+import editTip from "@/utils/editTip";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -105,12 +106,27 @@ export default {
       this.fieldErrors.description = !this.$v.tipCopy.description.maxLength;
     },
     tip(val) {
+      console.log("I fired?");
       if (Object.keys(val).length > 0) {
         this.tipCopy = Object.assign({}, this.tip.content);
       }
     },
   },
   methods: {
+    validate() {
+      console.log(this.tipCopy.url);
+      // return;
+
+      const newTip = {
+        title: this.tipCopy.title,
+        category: this.tipCopy.category,
+        description: this.tipCopy.description,
+        // url: this.tipCopy.url,
+      };
+
+      // TODO: Validation on fields
+      editTip(newTip, this.tip.id);
+    },
     validateUrl() {
       if (!this.$v.url.url) {
         this.fieldErrors.url = "Please enter a valid url";

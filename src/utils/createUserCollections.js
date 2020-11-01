@@ -6,7 +6,7 @@ export default function createUserCollections(uid, username) {
     const addTips = fb.tipsCollection.doc(uid).set({ tips: [] });
     const addUser = fb.usersCollection.doc(uid).set({
       username: username,
-      followers: [],
+      following: [],
       firstLogin: true,
       public: true,
     });

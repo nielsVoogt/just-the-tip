@@ -6,8 +6,9 @@
       v-model="searchQuery"
     />
 
+    <div>is following: {{ isFollower }}</div>
     <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
-    <Button type="button" v-else @click="addFriend()">Add to friends</Button>
+    <Button type="button" v-else @click="addNewFriend()">Add to friends</Button>
 
     <div v-if="tips.length">
       <Filters
@@ -21,6 +22,7 @@
           :key="tip.id"
           :tip="tip.content"
           :is-owner="isOwner"
+          :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -55,6 +57,7 @@
 </template>
 
 <script>
+import addFriend from "@/utils/addFriend";
 import Input from "@/components/ui/Input";
 import Tip from "@/components/tips/Tip";
 import Filters from "@/components/tips/Filters";
@@ -62,6 +65,7 @@ import EditTip from "@/components/tips/EditTip";
 import DeleteTip from "@/components/tips/DeleteTip";
 import AddTip from "@/components/tips/AddTip";
 import Button from "@/components/ui/Button";
+import { mapGetters } from "vuex";
 
 export default {
   name: "TipOverview",
@@ -95,8 +99,20 @@ export default {
       type: Boolean,
       required: false,
     },
+    uid: {
+      type: String,
+      required: false,
+    },
+    slug: {
+      type: String,
+      required: false,
+    },
   },
   computed: {
+    ...mapGetters(["userProfile"]),
+    isFollower() {
+      return this.userProfile.following.includes(this.uid);
+    },
     filteredTips() {
       const self = this;
       return this.tips.filter((tip) => {
@@ -119,8 +135,13 @@ export default {
     },
   },
   methods: {
-    addFriend() {
-      console.log("Trying to add a friend");
+    addNewFriend() {
+      addFriend(this.uid).then(() => {
+        this.$notificationHub.$emit("add-notification", {
+          message: `Waiting on confirmation by ${this.slug}`,
+          type: "default",
+        });
+      });
     },
     selectCategory(payload) {
       this.selectedCategory = payload;

@@ -29,7 +29,7 @@
 
     <div class="tip-footer">
       <Label :name="tip.category" />
-      <Heart :likes="tip.likes" :allow-interaction="isOwner" />
+      <Heart :likes="tip.likes" :allow-interaction="allowInteraction" />
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@ import { ExternalLinkIcon, EditIcon, Trash2Icon } from "vue-feather-icons";
 import OptionsMenu from "@/components/ui/OptionsMenu";
 import Heart from "@/components/tips/Heart";
 import Label from "@/components/ui/Label";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Tip",
@@ -59,6 +60,19 @@ export default {
     isOwner: {
       type: Boolean,
       required: false,
+    },
+    isFollower: {
+      type: Boolean,
+      required: false,
+    },
+  },
+  computed: {
+    allowInteraction() {
+      if (this.isOwner === false || this.isFollower === false) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
   methods: {
