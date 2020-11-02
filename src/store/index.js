@@ -14,7 +14,8 @@ const initialState = () => {
     error: null,
     userProfile: null,
     userTips: [],
-    friends: [],
+    followers: null,
+    pendingFollowers: null,
   };
 };
 

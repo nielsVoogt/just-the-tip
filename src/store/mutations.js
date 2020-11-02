@@ -2,8 +2,9 @@ import {
   ADD_NEW_FOLLOWING_ID,
   ADD_NEW_TIP,
   SET_ERROR,
-  SET_FRIENDS,
+  SET_FOLLOWERS,
   SET_INITIAL_STATE,
+  SET_PENDING_FOLLOWERS,
   SET_USER,
   SET_USER_PROFILE,
   SET_USER_TIPS,
@@ -25,8 +26,11 @@ const mutations = {
   [SET_ERROR](state, payload) {
     state.error = payload;
   },
-  [SET_FRIENDS](state, payload) {
-    state.friends = payload;
+  [SET_FOLLOWERS](state, payload) {
+    state.followers = payload;
+  },
+  [SET_PENDING_FOLLOWERS](state, payload) {
+    state.pendingFollowers = payload;
   },
   [SET_INITIAL_STATE](state, newState) {
     Object.assign(state, newState);

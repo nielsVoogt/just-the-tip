@@ -68,6 +68,7 @@ export default {
   },
   computed: {
     allowInteraction() {
+      // THIS DOESN"T REALLY WORK I THINK.
       if (this.isOwner === false || this.isFollower === false) {
         return false;
       } else {

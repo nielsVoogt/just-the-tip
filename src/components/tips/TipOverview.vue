@@ -6,7 +6,7 @@
       v-model="searchQuery"
     />
 
-    <div>is following: {{ isFollower }}</div>
+    <!-- <div>is following: {{ isFollower }}</div> -->
     <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
     <Button type="button" v-else @click="addNewFriend()">Add to friends</Button>
 
@@ -22,7 +22,6 @@
           :key="tip.id"
           :tip="tip.content"
           :is-owner="isOwner"
-          :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -110,9 +109,9 @@ export default {
   },
   computed: {
     ...mapGetters(["userProfile"]),
-    isFollower() {
-      return this.userProfile.following.includes(this.uid);
-    },
+    // isFollower() {
+    //   return this.userProfile.following.includes(this.uid);
+    // },
     filteredTips() {
       const self = this;
       return this.tips.filter((tip) => {
