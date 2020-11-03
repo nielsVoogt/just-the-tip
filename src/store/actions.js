@@ -56,6 +56,7 @@ const actions = {
   fetchFollowersAction({ commit }) {
     console.log("fetchFollowersAction fired");
     getFollowers().then((followers) => {
+      console.log(followers);
       commit(types.SET_FOLLOWERS, followers);
     });
   },

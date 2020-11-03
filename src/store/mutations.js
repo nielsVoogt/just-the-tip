@@ -27,6 +27,7 @@ const mutations = {
     state.error = payload;
   },
   [SET_FOLLOWERS](state, payload) {
+    console.log("SET FOLLOWERS MUTATION", payload);
     state.followers = payload;
   },
   [SET_PENDING_FOLLOWERS](state, payload) {
