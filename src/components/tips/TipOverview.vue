@@ -145,12 +145,21 @@ export default {
   },
   methods: {
     addNewFriend() {
-      addFriend(this.uid).then(() => {
-        this.$notificationHub.$emit("add-notification", {
-          message: `Waiting on confirmation by ${this.slug}`,
-          type: "default",
+      addFriend(this.uid)
+        .then(() => {
+          this.$notificationHub.$emit("add-notification", {
+            message: `Waiting on confirmation by ${this.slug}`,
+            type: "default",
+          });
+        })
+        .catch((error) => {
+          if (error === "duplicate") {
+            this.$notificationHub.$emit("add-notification", {
+              message: `You already invited ${this.slug}`,
+              type: "error",
+            });
+          }
         });
-      });
     },
     selectCategory(payload) {
       this.selectedCategory = payload;
