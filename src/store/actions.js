@@ -1,9 +1,11 @@
-const fb = require("@/firebaseConfig.js");
-
 import * as types from "./mutation-types.js";
 
+import getFollowers from "@/utils/getFollowers";
+import getPendingFollowers from "@/utils/getPendingFollowers";
 import getTips from "@/utils/getTips";
 import getUserProfile from "@/utils/getUserProfile";
+
+const fb = require("@/firebaseConfig.js");
 
 const actions = {
   deleteAccountAction: ({ commit }, payload) => {
@@ -32,26 +34,35 @@ const actions = {
     });
 
     dispatch("fetchUserTipsAction", uid);
+    dispatch("fetchPendingFollowersAction");
   },
 
-  async fetchUserTipsAction({ commit }, uid) {
-    const tips = await getTips(uid);
-    commit(types.SET_USER_TIPS, tips);
+  fetchUserTipsAction({ commit }, uid) {
+    getTips(uid)
+      .then((tips) => {
+        commit(types.SET_USER_TIPS, tips);
+      })
+      .catch((error) => console.log(error));
   },
 
-  fetchFriends({ commit, state }) {
-    let promises = [];
-    const following = state.userProfile.following;
+  fetchPendingFollowersAction({ commit }) {
+    getPendingFollowers()
+      .then((pendingFollowers) => {
+        commit(types.SET_PENDING_FOLLOWERS, pendingFollowers);
+      })
+      .catch((error) => console.log(error));
+  },
 
-    if (following.length) {
-      following.forEach((followerUid) =>
-        promises.push(getUserProfile(followerUid, true))
-      );
+  fetchFollowersAction({ commit }) {
+    getFollowers().then((followers) => {
+      commit(types.SET_FOLLOWERS, followers);
+    });
+  },
 
-      Promise.all(promises).then((followersData) => {
-        commit(types.SET_FRIENDS, followersData);
-      });
-    }
+  updateLocalFollowersAction({ commit }, newFollowerUid) {
+    getUserProfile(newFollowerUid).then((newFollower) => {
+      commit(types.SET_NEW_FOLLOWER, newFollower);
+    });
   },
 
   logOutAction: ({ commit }) => {

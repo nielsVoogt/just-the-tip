@@ -1,14 +1,15 @@
 import { db, fb } from "@/firebaseConfig.js";
 
 export default function addFriend(newFriendUid) {
+  const followerRef = db.collection("followers").doc(newFriendUid);
+
   const uid = fb.auth().currentUser.uid;
   const name = fb.auth().currentUser.displayName;
-  const friendRef = db.collection("users").doc(newFriendUid);
 
-  return new Promise((resolve, _reject) => {
-    friendRef
+  return new Promise((resolve, reject) => {
+    followerRef
       .update({
-        newFollowers: fb.firestore.FieldValue.arrayUnion({
+        pending: fb.firestore.FieldValue.arrayUnion({
           uid,
           name,
         }),

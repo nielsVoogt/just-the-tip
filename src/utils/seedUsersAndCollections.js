@@ -25,25 +25,53 @@ const addUsername = (user) => {
   });
 };
 
-const addUser = async (user) => {
-  const following = userUidCollection.filter((id) => id !== user.uid);
-  let newFollower = following.pop();
-  const rand = Math.random() >= 0.5;
-  rand === true ? (newFollower = []) : [newFollower];
-
+const addUser = (user) => {
   return new Promise((resolve, _reject) => {
     db.collection("users")
       .doc(user.uid)
       .set({
         username: user.username,
-        newFollowers: newFollower,
-        following: following,
         firstLogin: true,
         public: true,
         tipCount: tipCount,
       })
       .then(() => resolve())
       .catch((error) => seedError(error));
+  });
+};
+
+const addFollowers = (user) => {
+  const following = userUidCollection.filter((i) => i.uid !== user.uid);
+  let pendingFollower = following.pop();
+  const rand = Math.random() >= 0.5;
+
+  const promises = [];
+
+  if (rand === false) {
+    promises.push(
+      db
+        .collection("followers")
+        .doc(user.uid)
+        .set({
+          pending: admin.firestore.FieldValue.arrayUnion(pendingFollower),
+        })
+        .catch((error) => seedError(error))
+    );
+  }
+
+  for (let i = 0; i < following.length; ++i) {
+    promises.push(
+      db
+        .collection("followers")
+        .doc(user.uid)
+        .collection("following")
+        .doc(following[i].uid)
+        .set({})
+    );
+  }
+
+  return new Promise((resolve, _reject) => {
+    Promise.all(promises).then(() => resolve());
   });
 };
 
@@ -92,6 +120,7 @@ const createCollections = (users) => {
     await addUsername(user);
     await addTips(user);
     await addUser(user);
+    await addFollowers(user);
   }
 
   const promises = [];
@@ -111,7 +140,10 @@ const createNewFirebaseUser = () => {
         displayName: `johndoe${rand}`,
       })
       .then((userRecord) => {
-        userUidCollection.push(userRecord.uid);
+        userUidCollection.push({
+          uid: userRecord.uid,
+          username: userRecord.displayName,
+        });
         usernamesCollection.push(userRecord.displayName);
         resolve({
           uid: userRecord.uid,

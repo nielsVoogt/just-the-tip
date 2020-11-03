@@ -5,10 +5,13 @@
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
-
-    <div>is following: {{ isFollower }}</div>
+    <!-- {{ isFollower }} -->
     <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
-    <Button type="button" v-else @click="addNewFriend()">Add to friends</Button>
+    <div v-else>
+      <Button type="button" @click="addNewFriend()" v-if="!isFollower">
+        Add to friends
+      </Button>
+    </div>
 
     <div v-if="tips.length">
       <Filters
@@ -22,7 +25,6 @@
           :key="tip.id"
           :tip="tip.content"
           :is-owner="isOwner"
-          :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -88,6 +90,7 @@ export default {
       showEditModal: false,
       showDeleteModal: false,
       showAddModal: false,
+      isFollower: false,
     };
   },
   props: {
@@ -109,10 +112,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["userProfile"]),
-    isFollower() {
-      return this.userProfile.following.includes(this.uid);
-    },
+    ...mapGetters(["followers"]),
     filteredTips() {
       const self = this;
       return this.tips.filter((tip) => {
@@ -121,6 +121,15 @@ export default {
     },
   },
   watch: {
+    followers: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          const follower = this.followers.find((o) => o.username === this.slug);
+          if (follower) this.isFollower = true;
+        }
+      },
+    },
     filteredTips: {
       immediate: true,
       handler(val) {

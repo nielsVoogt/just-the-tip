@@ -12,14 +12,10 @@ const getters = {
     return state.friends;
   },
   followers(state) {
-    if (state.userProfile) {
-      return state.userProfile.followers;
-    }
+    return state.followers;
   },
-  newFollowers(state) {
-    if (state.userProfile) {
-      return state.userProfile.newFollowers;
-    }
+  pendingFollowers(state) {
+    return state.pendingFollowers;
   },
   isUserAuth(state) {
     return !!state.user;

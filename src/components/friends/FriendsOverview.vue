@@ -1,11 +1,22 @@
 <template>
   <div>
     <SearchUsers />
-    <div v-if="friends.length">
-      {{ friends }}
+    <div v-if="followers">
+      <Friend
+        v-for="follower in followers"
+        :follower="follower"
+        :key="follower.username"
+      />
     </div>
     <div v-else>
       You have no friends yet
+    </div>
+    <div v-if="pendingFollowers">
+      <FriendRequest
+        v-for="pendingFollower in pendingFollowers"
+        :pending-follower="pendingFollower"
+        :key="pendingFollower.username"
+      />
     </div>
   </div>
 </template>
@@ -13,33 +24,25 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import SearchUsers from "@/components/friends/SearchUsers";
+import Friend from "@/components/friends/Friend";
+import FriendRequest from "@/components/friends/FriendRequest";
 
 export default {
   name: "FriendsOverview",
   components: {
+    FriendRequest,
     SearchUsers,
+    Friend,
   },
   computed: {
-    ...mapGetters(["friends", "userProfile"]),
-  },
-  watch: {
-    userProfile(user) {
-      if (user && user.following.length) {
-        if (this.friends.length) return;
-        this.fetchFriends();
-      }
-    },
+    ...mapGetters(["followers", "pendingFollowers"]),
   },
   methods: {
-    ...mapActions(["fetchFriends"]),
+    ...mapActions(["fetchFollowersAction"]),
   },
   created() {
-    // There was a issue when a user refreshed the page the friends
-    // were not fetched, because the userprofile wasn't loaded yet.
-    // Thats why we check in the created hook + we watch the userProfile
-    if (this.userProfile && this.userProfile.following.length) {
-      if (this.friends.length) return;
-      this.fetchFriends();
+    if (this.followers === null) {
+      this.fetchFollowersAction();
     }
   },
 };
