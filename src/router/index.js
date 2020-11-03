@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import routes from "@/router/routes";
-import { store } from '@/store/index.js'
+import { store } from "@/store/index.js";
 
 Vue.use(VueRouter);
 
@@ -11,18 +11,17 @@ const router = new VueRouter({
   routes,
 });
 
-
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const isAuthenticated = store.getters.isUserAuth
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    const isAuthenticated = store.getters.isUserAuth;
     if (!isAuthenticated) {
-      next({ path: '/' })
+      next({ path: "/" });
     } else {
-      next()
+      next();
     }
   } else {
-    next() // make sure to always call next()!
+    next();
   }
-})
+});
 
 export default router;

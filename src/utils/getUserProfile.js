@@ -7,6 +7,7 @@ export default function getUserProfile(uid, follower = false) {
       if (doc.exists) {
         if (follower) {
           const follower = {
+            uid,
             tipCount: doc.data().tipCount,
             username: doc.data().username,
           };

@@ -25,6 +25,7 @@
           :key="tip.id"
           :tip="tip.content"
           :is-owner="isOwner"
+          :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -125,7 +126,7 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
-          const follower = this.followers.find((o) => o.username === this.slug);
+          const follower = this.followers.find((o) => o.uid === this.uid);
           if (follower) this.isFollower = true;
         }
       },

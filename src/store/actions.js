@@ -27,7 +27,7 @@ const actions = {
     commit(types.ADD_NEW_TIP, tip);
   },
 
-  async fetchUserDataAction({ commit, dispatch }, uid) {
+  fetchUserDataAction({ commit, dispatch }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
     userProfile.get().then((doc) => {
       commit(types.SET_USER_PROFILE, doc.data());
