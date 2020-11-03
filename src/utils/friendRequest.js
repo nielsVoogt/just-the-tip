@@ -2,32 +2,29 @@ import { db, fb } from "@/firebaseConfig.js";
 
 export default function friendRequest(action, follower) {
   const uid = fb.auth().currentUser.uid;
+  return new Promise((resolve, _reject) => {
+    const removePendingRequest = () => {
+      db.collection(`followers`)
+        .doc(uid)
+        .update({
+          pending: fb.firestore.FieldValue.arrayRemove({
+            uid: follower.uid,
+            username: follower.username,
+          }),
+        })
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    };
 
-  // Add the follower to following collection when accepted
-  const addFollowerToFollowingCollection = db
-    .collection(`followers`)
-    .doc(uid)
-    .collection("following")
-    .doc(follower.uid)
-    .set({});
-
-  // Remove pending request
-  const removePendingRequest = db
-    .collection(`followers`)
-    .doc(uid)
-    .update({
-      pending: fb.firestore.FieldValue.arrayRemove({
-        uid: follower.uid,
-        username: follower.username,
-      }),
-    });
-
-  let promises = [removePendingRequest];
-
-  if (action === "accept") {
-    console.log("pushing addFollowerToFollowingCollection");
-    promises.push(addFollowerToFollowingCollection);
-  }
-
-  return Promise.all(promises);
+    if (action === "accept") {
+      db.collection(`followers`)
+        .doc(uid)
+        .collection("following")
+        .doc(follower.uid)
+        .set({})
+        .then(() => removePendingRequest());
+    } else {
+      removePendingRequest();
+    }
+  });
 }

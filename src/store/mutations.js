@@ -1,9 +1,9 @@
 import {
-  ADD_NEW_FOLLOWING_ID,
   ADD_NEW_TIP,
   SET_ERROR,
   SET_FOLLOWERS,
   SET_INITIAL_STATE,
+  SET_NEW_FOLLOWER,
   SET_PENDING_FOLLOWERS,
   SET_USER,
   SET_USER_PROFILE,
@@ -27,8 +27,10 @@ const mutations = {
     state.error = payload;
   },
   [SET_FOLLOWERS](state, payload) {
-    console.log("SET FOLLOWERS MUTATION", payload);
     state.followers = payload;
+  },
+  [SET_NEW_FOLLOWER](state, payload) {
+    state.followers.unshift(payload);
   },
   [SET_PENDING_FOLLOWERS](state, payload) {
     state.pendingFollowers = payload;

@@ -3,6 +3,7 @@ import * as types from "./mutation-types.js";
 import getFollowers from "@/utils/getFollowers";
 import getPendingFollowers from "@/utils/getPendingFollowers";
 import getTips from "@/utils/getTips";
+import getUserProfile from "@/utils/getUserProfile";
 
 const fb = require("@/firebaseConfig.js");
 
@@ -45,7 +46,6 @@ const actions = {
   },
 
   fetchPendingFollowersAction({ commit }) {
-    console.log("fetchPendingFollowersAction fired");
     getPendingFollowers()
       .then((pendingFollowers) => {
         commit(types.SET_PENDING_FOLLOWERS, pendingFollowers);
@@ -54,10 +54,14 @@ const actions = {
   },
 
   fetchFollowersAction({ commit }) {
-    console.log("fetchFollowersAction fired");
     getFollowers().then((followers) => {
-      console.log(followers);
       commit(types.SET_FOLLOWERS, followers);
+    });
+  },
+
+  updateLocalFollowersAction({ commit }, newFollowerUid) {
+    getUserProfile(newFollowerUid).then((newFollower) => {
+      commit(types.SET_NEW_FOLLOWER, newFollower);
     });
   },
 

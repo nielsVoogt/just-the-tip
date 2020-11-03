@@ -12,9 +12,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import friendRequest from "@/utils/friendRequest";
-
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "FriendRequest",
   props: {
@@ -24,9 +23,14 @@ export default {
     },
   },
   methods: {
+    ...mapActions([
+      "fetchPendingFollowersAction",
+      "updateLocalFollowersAction",
+    ]),
     acceptFriendRequest() {
       friendRequest("accept", this.pendingFollower).then(() => {
-        console.log("accepted new follower");
+        this.fetchPendingFollowersAction();
+        this.updateLocalFollowersAction(this.pendingFollower.uid);
         this.$notificationHub.$emit("add-notification", {
           message: `You accepted ${this.pendingFollower.username}'s request`,
           type: "default",
@@ -35,7 +39,7 @@ export default {
     },
     denyFriendRequest() {
       friendRequest("deny", this.pendingFollower).then(() => {
-        console.log("denied then fired");
+        this.fetchPendingFollowersAction();
         this.$notificationHub.$emit("add-notification", {
           message: `You denied ${this.pendingFollower.username}'s request`,
           type: "default",

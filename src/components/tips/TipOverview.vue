@@ -7,9 +7,11 @@
     />
     <!-- {{ isFollower }} -->
     <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
-    <Button type="button" @click="addNewFriend()" v-if="!isFollower">
-      Add to friends
-    </Button>
+    <div v-else>
+      <Button type="button" @click="addNewFriend()" v-if="!isFollower">
+        Add to friends
+      </Button>
+    </div>
 
     <div v-if="tips.length">
       <Filters
