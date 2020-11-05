@@ -7,7 +7,9 @@ export default function getPendingFollowers() {
     db.collection(`followers`)
       .doc(uid)
       .get()
-      .then((doc) => (doc.exists ? resolve(doc.data().pending) : reject()))
+      .then((doc) => {
+        if (doc.exists) resolve(doc.data().pending);
+      })
       .catch((error) => reject(error));
   });
 }

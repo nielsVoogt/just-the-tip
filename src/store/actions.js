@@ -27,6 +27,10 @@ const actions = {
     commit(types.ADD_NEW_TIP, tip);
   },
 
+  deleteTipAction: ({ commit }, id) => {
+    commit(types.DELETE_TIP, id);
+  },
+
   fetchUserDataAction({ commit, dispatch }, uid) {
     const userProfile = fb.usersCollection.doc(uid);
     userProfile.get().then((doc) => {
@@ -74,7 +78,6 @@ const actions = {
           resolve();
         })
         .catch((error) => {
-          commit(types.SET_ERROR, error);
           reject();
         });
     });

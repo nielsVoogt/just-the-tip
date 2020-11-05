@@ -150,11 +150,7 @@ export default {
             content: tip,
           });
 
-          // Notify the user of the great success
-          this.$notificationHub.$emit("add-notification", {
-            message: "Added new tip",
-            type: "default",
-          });
+          this.$notificationHub.$emit("success", "Added new tip");
 
           // UI reset
           this.closeModal();

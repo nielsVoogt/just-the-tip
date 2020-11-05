@@ -20,14 +20,15 @@ export default {
   },
   watch: {
     notifications() {
-      setTimeout(() => {
-        this.notifications.shift();
-      }, 5000);
+      setTimeout(() => this.notifications.shift(), 5000);
     },
   },
   created() {
-    this.$notificationHub.$on("add-notification", (payload) => {
-      this.notifications.push(payload);
+    this.$notificationHub.$on("success", (message) => {
+      this.notifications.push({ message: message, type: "success" });
+    });
+    this.$notificationHub.$on("error", (message) => {
+      this.notifications.push({ message: message, type: "error" });
     });
   },
 };

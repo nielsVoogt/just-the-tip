@@ -31,19 +31,19 @@ export default {
       friendRequest("accept", this.pendingFollower).then(() => {
         this.fetchPendingFollowersAction();
         this.updateLocalFollowersAction(this.pendingFollower.uid);
-        this.$notificationHub.$emit("add-notification", {
-          message: `You accepted ${this.pendingFollower.username}'s request`,
-          type: "default",
-        });
+        this.$notificationHub.$emit(
+          "success",
+          `You accepted ${this.pendingFollower.username}'s request`
+        );
       });
     },
     denyFriendRequest() {
       friendRequest("deny", this.pendingFollower).then(() => {
         this.fetchPendingFollowersAction();
-        this.$notificationHub.$emit("add-notification", {
-          message: `You denied ${this.pendingFollower.username}'s request`,
-          type: "default",
-        });
+        this.$notificationHub.$emit(
+          "error",
+          `You denied ${this.pendingFollower.username}'s request`
+        );
       });
     },
   },

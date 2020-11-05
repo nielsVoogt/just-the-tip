@@ -31,10 +31,7 @@ export default {
       fb.auth.currentUser
         .updateEmail(this.newEmailAdress)
         .then(() => {
-          this.$notificationHub.$emit("add-notification", {
-            message: "Email adress updated",
-            type: "default",
-          });
+          this.$notificationHub.$emit("success", "Email adress updated");
         })
         .catch((error) => console.error(error));
     },

@@ -61,6 +61,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    id: {
+      type: String,
+      required: false,
+    },
     isFollower: {
       type: Boolean,
       required: false,

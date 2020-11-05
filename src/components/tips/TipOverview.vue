@@ -5,7 +5,7 @@
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
-    <!-- {{ isFollower }} -->
+    {{ isFollower }}
     <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
     <div v-else>
       <Button type="button" @click="addNewFriend()" v-if="!isFollower">
@@ -24,6 +24,7 @@
           v-for="tip in filteredTips"
           :key="tip.id"
           :tip="tip.content"
+          :id="tip.id"
           :is-owner="isOwner"
           :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
@@ -148,17 +149,17 @@ export default {
     addNewFriend() {
       addFriend(this.uid)
         .then(() => {
-          this.$notificationHub.$emit("add-notification", {
-            message: `Waiting on confirmation by ${this.slug}`,
-            type: "default",
-          });
+          this.$notificationHub.$emit(
+            "success",
+            `Waiting on confirmation by ${this.slug}`
+          );
         })
         .catch((error) => {
           if (error === "duplicate") {
-            this.$notificationHub.$emit("add-notification", {
-              message: `You already invited ${this.slug}`,
-              type: "error",
-            });
+            this.$notificationHub.$emit(
+              "error",
+              `You already invited ${this.slug}`
+            );
           }
         });
     },

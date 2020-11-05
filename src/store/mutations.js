@@ -1,6 +1,6 @@
 import {
   ADD_NEW_TIP,
-  SET_ERROR,
+  DELETE_TIP,
   SET_FOLLOWERS,
   SET_INITIAL_STATE,
   SET_NEW_FOLLOWER,
@@ -14,6 +14,10 @@ const mutations = {
   [ADD_NEW_TIP](state, payload) {
     state.userTips.unshift(payload);
   },
+  [DELETE_TIP](state, payload) {
+    const itemToRemoveIndex = state.userTips.findIndex((i) => i.id === payload);
+    if (itemToRemoveIndex !== -1) state.userTips.splice(itemToRemoveIndex, 1);
+  },
   [SET_USER_TIPS](state, payload) {
     state.userTips = payload;
   },
@@ -22,9 +26,6 @@ const mutations = {
   },
   [SET_USER](state, payload) {
     state.user = payload;
-  },
-  [SET_ERROR](state, payload) {
-    state.error = payload;
   },
   [SET_FOLLOWERS](state, payload) {
     state.followers = payload;

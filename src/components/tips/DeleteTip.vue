@@ -2,7 +2,8 @@
   <Modal v-show="modalVisibile" @close="closeModal()" title="Delete tip">
     <template v-slot:body>
       <p>
-        Are you sure you want to delete <strong>{{ tipCopy.title }}</strong>
+        Are you sure you want to delete
+        <strong>{{ title }}</strong>
       </p>
     </template>
     <template v-slot:footer-buttons>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import deleteTip from "@/utils/deleteTip";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 
@@ -35,7 +37,8 @@ export default {
   },
   data() {
     return {
-      tipCopy: {},
+      title: false,
+      id: false,
     };
   },
   components: {
@@ -45,17 +48,30 @@ export default {
   watch: {
     tip(val) {
       if (Object.keys(val).length > 0) {
-        this.tipCopy = Object.assign({}, this.tip.content);
+        this.title = this.tip.content.title;
+        this.id = this.tip.id;
       }
     },
   },
   methods: {
     confirmDelete() {
-      console.log("Delete this tip yo");
+      deleteTip(this.id)
+        .then(() => {
+          this.$store.dispatch("deleteTipAction", this.id);
+          this.$notificationHub.$emit("success", "Deleted tip!");
+          this.closeModal();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$notificationHub.$emit("error", "Something went wrong");
+          this.closeModal();
+        });
     },
     closeModal() {
       this.$emit("close");
-      setTimeout(() => (this.tipCopy = {}), 200);
+      setTimeout(() => {
+        (this.title = false), (this.id = false);
+      }, 200);
     },
   },
 };
