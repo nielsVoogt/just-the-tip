@@ -6,7 +6,9 @@ export default function deleteTip(tipId) {
     db.collection(`tips/${uid}/content`)
       .doc(tipId)
       .delete()
-      .then(resolve)
+      .then(() => {
+        resolve();
+      })
       .catch((error) => reject(error));
   });
 }

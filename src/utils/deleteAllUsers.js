@@ -36,12 +36,12 @@ function deleteUsers(userUids) {
       .deleteUsers(userUids)
       .then((response) => {
         console.log(`${response.successCount} users deleted`);
-        resolve;
+        resolve();
         process.exit();
       })
       .catch((error) => {
         console.log("deleteUsers error:", error);
-        reject;
+        reject();
         process.exit();
       });
   });

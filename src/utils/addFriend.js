@@ -20,7 +20,7 @@ export default function addFriend(newFriendUid) {
             .update({
               pending: fb.firestore.FieldValue.arrayUnion(newPendingFollower),
             })
-            .then(resolve())
+            .then(() => resolve())
             .catch((error) => reject(error));
         }
       } else {
@@ -29,7 +29,7 @@ export default function addFriend(newFriendUid) {
           .set({
             pending: fb.firestore.FieldValue.arrayUnion(newPendingFollower),
           })
-          .then(resolve())
+          .then(() => resolve())
           .catch((error) => reject(error));
       }
     });

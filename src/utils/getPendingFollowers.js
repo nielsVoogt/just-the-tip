@@ -8,10 +8,8 @@ export default function getPendingFollowers() {
       .doc(uid)
       .get()
       .then((doc) => {
-        if (doc.exists) {
-          resolve(doc.data().pending);
-        }
+        if (doc.exists) resolve(doc.data().pending);
       })
-      .catch(reject(error));
+      .catch((error) => reject(error));
   });
 }
