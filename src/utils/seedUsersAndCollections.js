@@ -12,16 +12,15 @@ const db = admin.firestore();
 const tipCount = 5;
 const userAmount = 5;
 const categories = ["movie", "documentary", "recipe", "book"];
-const userUidCollection = [];
-const usernamesCollection = [];
+const userCollection = [];
 
 const addUsername = (user) => {
   return new Promise((resolve, _reject) => {
     db.collection("usernames")
       .doc(user.username)
       .set({ uid: user.uid })
-      .then(() => resolve())
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
@@ -35,13 +34,13 @@ const addUser = (user) => {
         public: true,
         tipCount: tipCount,
       })
-      .then(() => resolve())
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
 const addFollowers = (user) => {
-  const following = userUidCollection.filter((i) => i.uid !== user.uid);
+  const following = userCollection.filter((i) => i.uid !== user.uid);
   let pendingFollower = following.pop();
   const rand = Math.random() >= 0.5;
 
@@ -55,7 +54,7 @@ const addFollowers = (user) => {
         .set({
           pending: admin.firestore.FieldValue.arrayUnion(pendingFollower),
         })
-        .catch((error) => seedError(error))
+        .catch(seedError)
     );
   }
 
@@ -70,17 +69,24 @@ const addFollowers = (user) => {
     );
   }
 
-  return new Promise((resolve, _reject) => {
-    Promise.all(promises).then(() => resolve());
-  });
+  return Promise.all(promises);
 };
 
 const addTip = (user) => {
+  let likes = [...userCollection];
+
+  const itemToRemoveIndex = likes.findIndex((i) => i.uid === user.uid);
+
+  if (itemToRemoveIndex !== -1) {
+    likes.splice(itemToRemoveIndex, 1);
+  }
+
   const lorem = new LoremIpsum();
+
   return new Promise((resolve, _reject) => {
     const likesArray =
       Math.random() >= 0.5
-        ? usernamesCollection
+        ? likes
             .sort(() => Math.random() - Math.random())
             .slice(0, Math.floor(Math.random() * (userAmount - 1)))
         : [];
@@ -96,61 +102,58 @@ const addTip = (user) => {
         category: categories[Math.floor(Math.random() * categories.length)],
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
 const addTips = (user) => {
-  return new Promise((resolve, _reject) => {
-    const promises = [];
+  const promises = [];
+  for (let i = 0; i < tipCount; ++i) {
+    promises.push(addTip(user));
+  }
 
-    for (let i = 0; i < tipCount; ++i) {
-      promises.push(addTip(user));
-    }
-
-    Promise.all(promises).then(() => resolve());
-  });
+  return Promise.all(promises);
 };
 
 const createCollections = (users) => {
   async function createCollection(user) {
     await addUsername(user);
-    await addTips(user);
     await addUser(user);
     await addFollowers(user);
+    await addTips(user);
   }
 
-  const promises = [];
-  users.forEach((user) => promises.push(createCollection(user)));
-  Promise.all(promises).then(() => seedSuccess());
+  const promises = users.map(createCollection);
+  Promise.all(promises).then(seedSuccess);
+};
+
+const getRandomUser = () => {
+  const rand = Math.floor(Math.random() * 10000);
+  return {
+    email: `user${rand}@example.com`,
+    emailVerified: true,
+    password: "secretPassword",
+    displayName: `johndoe${rand}`,
+  };
 };
 
 const createNewFirebaseUser = () => {
   return new Promise((resolve, _reject) => {
-    let rand = Math.floor(Math.random() * 10000);
     admin
       .auth()
-      .createUser({
-        email: `user${rand}@example.com`,
-        emailVerified: true,
-        password: "secretPassword",
-        displayName: `johndoe${rand}`,
-      })
+      .createUser(getRandomUser())
       .then((userRecord) => {
-        userUidCollection.push({
+        userCollection.push({
           uid: userRecord.uid,
           username: userRecord.displayName,
         });
-        usernamesCollection.push(userRecord.displayName);
         resolve({
           uid: userRecord.uid,
           username: userRecord.displayName,
         });
       })
-      .catch((error) => seedError(error));
+      .catch(seedError);
   });
 };
 
@@ -163,7 +166,7 @@ const seed = (userAmount) => {
 
   Promise.all(promises)
     .then((users) => createCollections(users))
-    .catch((error) => seedError(error));
+    .catch(seedError);
 };
 
 const seedSuccess = () => {

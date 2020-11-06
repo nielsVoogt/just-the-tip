@@ -8,6 +8,7 @@
       },
     ]"
   >
+    {{ likes }}
     <div class="heart-counter">
       <div class="heart-counter-current">
         {{ likes.length }}

@@ -15,7 +15,6 @@
         {{ tip.url }}
       </a>
     </div>
-
     <OptionsMenu v-if="isOwner">
       <button @click="editTip()" class="options-menu-item">
         <EditIcon size="1x" />
@@ -71,9 +70,13 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["user"]),
     allowInteraction() {
       if (this.isOwner) return false;
-      if (this.isFollower) return true;
+      if (this.isFollower) {
+        return true;
+      }
+
       return false;
     },
   },
@@ -84,6 +87,11 @@ export default {
     deleteTip() {
       this.$emit("delete");
     },
+  },
+  created() {
+    if (this.tip.likes.length) {
+      console.log(this.tip.likes.some((e) => e.uid === this.user.uid));
+    }
   },
 };
 </script>
