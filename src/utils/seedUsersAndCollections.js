@@ -19,8 +19,8 @@ const addUsername = (user) => {
     db.collection("usernames")
       .doc(user.username)
       .set({ uid: user.uid })
-      .then(() => resolve())
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
@@ -34,8 +34,8 @@ const addUser = (user) => {
         public: true,
         tipCount: tipCount,
       })
-      .then(() => resolve())
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
@@ -54,7 +54,7 @@ const addFollowers = (user) => {
         .set({
           pending: admin.firestore.FieldValue.arrayUnion(pendingFollower),
         })
-        .catch((error) => seedError(error))
+        .catch(seedError)
     );
   }
 
@@ -69,17 +69,19 @@ const addFollowers = (user) => {
     );
   }
 
-  return new Promise((resolve, _reject) => {
-    Promise.all(promises).then(() => resolve());
-  });
+  return Promise.all(promises);
 };
 
 const addTip = (user) => {
-  const lorem = new LoremIpsum();
+  let likes = [...userCollection];
 
-  let likes = userCollection;
   const itemToRemoveIndex = likes.findIndex((i) => i.uid === user.uid);
-  if (itemToRemoveIndex !== -1) likes.splice(itemToRemoveIndex, 1);
+
+  if (itemToRemoveIndex !== -1) {
+    likes.splice(itemToRemoveIndex, 1);
+  }
+
+  const lorem = new LoremIpsum();
 
   return new Promise((resolve, _reject) => {
     const likesArray =
@@ -88,6 +90,7 @@ const addTip = (user) => {
             .sort(() => Math.random() - Math.random())
             .slice(0, Math.floor(Math.random() * (userAmount - 1)))
         : [];
+
     db.collection("tips")
       .doc(user.uid)
       .collection("content")
@@ -99,23 +102,18 @@ const addTip = (user) => {
         category: categories[Math.floor(Math.random() * categories.length)],
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
       })
-      .then(() => {
-        resolve();
-      })
-      .catch((error) => seedError(error));
+      .then(resolve)
+      .catch(seedError);
   });
 };
 
 const addTips = (user) => {
-  return new Promise((resolve, _reject) => {
-    const promises = [];
+  const promises = [];
+  for (let i = 0; i < tipCount; ++i) {
+    promises.push(addTip(user));
+  }
 
-    for (let i = 0; i < tipCount; ++i) {
-      promises.push(addTip(user));
-    }
-
-    Promise.all(promises).then(() => resolve());
-  });
+  return Promise.all(promises);
 };
 
 const createCollections = (users) => {
@@ -126,22 +124,25 @@ const createCollections = (users) => {
     await addTips(user);
   }
 
-  const promises = [];
-  users.forEach((user) => promises.push(createCollection(user)));
-  Promise.all(promises).then(() => seedSuccess());
+  const promises = users.map(createCollection);
+  Promise.all(promises).then(seedSuccess);
+};
+
+const getRandomUser = () => {
+  const rand = Math.floor(Math.random() * 10000);
+  return {
+    email: `user${rand}@example.com`,
+    emailVerified: true,
+    password: "secretPassword",
+    displayName: `johndoe${rand}`,
+  };
 };
 
 const createNewFirebaseUser = () => {
   return new Promise((resolve, _reject) => {
-    let rand = Math.floor(Math.random() * 10000);
     admin
       .auth()
-      .createUser({
-        email: `user${rand}@example.com`,
-        emailVerified: true,
-        password: "secretPassword",
-        displayName: `johndoe${rand}`,
-      })
+      .createUser(getRandomUser())
       .then((userRecord) => {
         userCollection.push({
           uid: userRecord.uid,
@@ -152,7 +153,7 @@ const createNewFirebaseUser = () => {
           username: userRecord.displayName,
         });
       })
-      .catch((error) => seedError(error));
+      .catch(seedError);
   });
 };
 
@@ -165,7 +166,7 @@ const seed = (userAmount) => {
 
   Promise.all(promises)
     .then((users) => createCollections(users))
-    .catch((error) => seedError(error));
+    .catch(seedError);
 };
 
 const seedSuccess = () => {
