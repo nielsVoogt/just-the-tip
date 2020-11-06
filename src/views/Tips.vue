@@ -9,6 +9,7 @@
       v-if="tips.length"
       :uid="uid"
       :slug="username"
+      :cta="cta"
     />
   </div>
 </template>
@@ -19,6 +20,7 @@ import TipOverview from "@/components/tips/TipOverview";
 import getUidFromSlug from "@/utils/getUidFromSlug";
 import getTips from "@/utils/getTips";
 import getUserProfile from "@/utils/getUserProfile";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Tips",
@@ -31,24 +33,39 @@ export default {
       userNotPublic: false,
       tips: [],
       uid: false,
+      cta: false,
     };
   },
   components: {
     TipOverview,
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
-    checkIfProfileIsPublic(uid) {
+    async checkIfProfileIsPublic(uid) {
       const self = this;
-      getUserProfile(uid).then((user) => {
-        if (user.public) {
-          this.uid = uid;
-          getTips(uid).then((tips) => {
-            this.tips = tips;
-          });
-        } else {
-          this.userNotPublic = true;
-        }
-      });
+      const profile = await getUserProfile(uid);
+
+      if (!profile.public) {
+        this.userNotPublic = true;
+        return;
+      } else {
+        this.uid = uid;
+        this.user ? this.getUserTips() : this.getUserTips(2);
+      }
+    },
+
+    async getUserTips(limit) {
+      const tips = limit
+        ? await getTips(this.uid, limit)
+        : await getTips(this.uid);
+
+      if (limit) {
+        this.cta = true;
+      }
+
+      this.tips = tips;
     },
   },
   created() {

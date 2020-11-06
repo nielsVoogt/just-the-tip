@@ -5,12 +5,16 @@
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
-    {{ isFollower }}
-    <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
-    <div v-else>
-      <Button type="button" @click="addNewFriend()" v-if="!isFollower">
-        Add to friends
-      </Button>
+    <!-- {{ isFollower }} -->
+    <!-- {{ user }} -->
+    <!-- CHECK IF THE VISITOR IS A USER -->
+    <div v-if="user">
+      <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
+      <div v-else>
+        <Button type="button" @click="addNewFriend()" v-if="!isFollower">
+          Add to friends
+        </Button>
+      </div>
     </div>
 
     <div v-if="tips.length">
@@ -34,6 +38,14 @@
               tip.content.category === selectedCategory
           "
         />
+
+        <div v-if="cta === true">
+          hallo..?
+          <!--
+            @TODO: add Call to action here
+            "We limit the tips to ..., register to see all {{username}}'s tips"
+          -->
+        </div>
       </div>
       <div v-if="noResults">
         No results
@@ -112,9 +124,13 @@ export default {
       type: String,
       required: false,
     },
+    cta: {
+      type: Boolean,
+      required: false,
+    },
   },
   computed: {
-    ...mapGetters(["followers"]),
+    ...mapGetters(["user", "followers"]),
     filteredTips() {
       const self = this;
       return this.tips.filter((tip) => {

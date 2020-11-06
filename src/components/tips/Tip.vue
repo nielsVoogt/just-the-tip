@@ -89,7 +89,7 @@ export default {
     },
   },
   created() {
-    if (this.tip.likes.length) {
+    if (this.tip.likes.length && this.user) {
       console.log(this.tip.likes.some((e) => e.uid === this.user.uid));
     }
   },

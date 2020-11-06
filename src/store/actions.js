@@ -39,6 +39,7 @@ const actions = {
 
     dispatch("fetchUserTipsAction", uid);
     dispatch("fetchPendingFollowersAction");
+    dispatch("fetchFollowersAction");
   },
 
   fetchUserTipsAction({ commit }, uid) {
