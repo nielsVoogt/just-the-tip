@@ -1,4 +1,4 @@
-import { fb, auth } from "@/firebaseConfig.js";
+import { auth, fb } from "@/firebaseConfig.js";
 
 export default function reAuthenticateUser(password) {
   return new Promise((resolve, reject) => {
@@ -9,7 +9,7 @@ export default function reAuthenticateUser(password) {
     );
     user
       .reauthenticateWithCredential(credentials)
-      .then((user) => resolve(user))
-      .catch((error) => reject(error));
+      .then(resolve(user))
+      .catch(reject(error));
   });
 }

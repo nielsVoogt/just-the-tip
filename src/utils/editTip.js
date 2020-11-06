@@ -12,7 +12,7 @@ export default function addTip(tip, tipId) {
         description: description,
         // url,
       })
-      .then(() => resolve())
+      .then(resolve())
       .catch((error) => reject(error));
   });
 }

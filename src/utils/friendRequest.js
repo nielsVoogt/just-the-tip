@@ -2,7 +2,7 @@ import { db, fb } from "@/firebaseConfig.js";
 
 export default function friendRequest(action, follower) {
   const uid = fb.auth().currentUser.uid;
-  return new Promise((resolve, _reject) => {
+  return new Promise((resolve, reject) => {
     const removePendingRequest = () => {
       db.collection(`followers`)
         .doc(uid)
@@ -12,7 +12,7 @@ export default function friendRequest(action, follower) {
             username: follower.username,
           }),
         })
-        .then(() => resolve())
+        .then(resolve)
         .catch((error) => reject(error));
     };
 
@@ -22,9 +22,9 @@ export default function friendRequest(action, follower) {
         .collection("following")
         .doc(follower.uid)
         .set({})
-        .then(() => removePendingRequest());
+        .then(removePendingRequest);
     } else {
-      removePendingRequest();
+      removePendingRequest;
     }
   });
 }
