@@ -12,8 +12,7 @@ const db = admin.firestore();
 const tipCount = 5;
 const userAmount = 5;
 const categories = ["movie", "documentary", "recipe", "book"];
-const userUidCollection = [];
-const usernamesCollection = [];
+const userCollection = [];
 
 const addUsername = (user) => {
   return new Promise((resolve, _reject) => {
@@ -41,7 +40,7 @@ const addUser = (user) => {
 };
 
 const addFollowers = (user) => {
-  const following = userUidCollection.filter((i) => i.uid !== user.uid);
+  const following = userCollection.filter((i) => i.uid !== user.uid);
   let pendingFollower = following.pop();
   const rand = Math.random() >= 0.5;
 
@@ -77,14 +76,18 @@ const addFollowers = (user) => {
 
 const addTip = (user) => {
   const lorem = new LoremIpsum();
+
+  let likes = userCollection;
+  const itemToRemoveIndex = likes.findIndex((i) => i.uid === user.uid);
+  if (itemToRemoveIndex !== -1) likes.splice(itemToRemoveIndex, 1);
+
   return new Promise((resolve, _reject) => {
     const likesArray =
       Math.random() >= 0.5
-        ? usernamesCollection
+        ? likes
             .sort(() => Math.random() - Math.random())
             .slice(0, Math.floor(Math.random() * (userAmount - 1)))
         : [];
-
     db.collection("tips")
       .doc(user.uid)
       .collection("content")
@@ -118,9 +121,9 @@ const addTips = (user) => {
 const createCollections = (users) => {
   async function createCollection(user) {
     await addUsername(user);
-    await addTips(user);
     await addUser(user);
     await addFollowers(user);
+    await addTips(user);
   }
 
   const promises = [];
@@ -140,11 +143,10 @@ const createNewFirebaseUser = () => {
         displayName: `johndoe${rand}`,
       })
       .then((userRecord) => {
-        userUidCollection.push({
+        userCollection.push({
           uid: userRecord.uid,
           username: userRecord.displayName,
         });
-        usernamesCollection.push(userRecord.displayName);
         resolve({
           uid: userRecord.uid,
           username: userRecord.displayName,
