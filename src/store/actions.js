@@ -70,6 +70,14 @@ const actions = {
     });
   },
 
+  editFriendTipsAction({ commit }, tips) {
+    commit(types.SET_FRIEND_TIPS, tips);
+  },
+
+  updateLocalFriendTipsLikesAction({ commit }, like) {
+    commit(types.UPDATE_FRIENDS_TIPS_LIKES, like);
+  },
+
   logOutAction: ({ commit }) => {
     return new Promise((resolve, reject) => {
       fb.auth

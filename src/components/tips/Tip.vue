@@ -58,13 +58,17 @@ export default {
     Trash2Icon,
   },
   props: {
-    tip: {
-      type: Object,
-      required: true,
-    },
     isOwner: {
       type: Boolean,
       required: false,
+    },
+    isFollower: {
+      type: Boolean,
+      required: false,
+    },
+    tip: {
+      type: Object,
+      required: true,
     },
     tipId: {
       type: String,
@@ -72,10 +76,6 @@ export default {
     },
     tipOwnerUid: {
       type: String,
-      required: false,
-    },
-    isFollower: {
-      type: Boolean,
       required: false,
     },
   },

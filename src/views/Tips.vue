@@ -1,12 +1,11 @@
 <template>
   <div>
-    {{ username }} {{ uid }}
     <div v-if="userNotFound">UserNotFound</div>
     <div v-if="userNotPublic">User not public</div>
     <TipOverview
-      :tips="tips"
+      :tips="friendTips"
       :is-owner="false"
-      v-if="tips.length"
+      v-if="friendTips.length"
       :uid="uid"
       :slug="username"
       :cta="cta"
@@ -20,7 +19,7 @@ import TipOverview from "@/components/tips/TipOverview";
 import getUidFromSlug from "@/utils/getUidFromSlug";
 import getTips from "@/utils/getTips";
 import getUserProfile from "@/utils/getUserProfile";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Tips",
@@ -40,9 +39,11 @@ export default {
     TipOverview,
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "friendTips"]),
   },
   methods: {
+    ...mapActions(["editFriendTipsAction"]),
+
     async checkIfProfileIsPublic(uid) {
       const self = this;
       const profile = await getUserProfile(uid);
@@ -65,7 +66,7 @@ export default {
         this.cta = true;
       }
 
-      this.tips = tips;
+      this.editFriendTipsAction(tips);
     },
   },
   created() {
@@ -74,6 +75,9 @@ export default {
       .catch(() => {
         this.userNotFound = true;
       });
+  },
+  beforeDestroy() {
+    this.editFriendTipsAction([]);
   },
 };
 </script>

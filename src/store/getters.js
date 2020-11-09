@@ -8,6 +8,9 @@ const getters = {
   userTips(state) {
     return state.userTips;
   },
+  friendTips(state) {
+    return state.friendTips;
+  },
   friends(state) {
     return state.friends;
   },

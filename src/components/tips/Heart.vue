@@ -43,6 +43,8 @@
 </template>
 <script>
 import likeTip from "@/utils/likeTip";
+import { mapActions } from "vuex";
+import { fb } from "@/firebaseConfig.js";
 
 export default {
   name: "Heart",
@@ -69,13 +71,20 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["updateLocalFriendTipsLikesAction"]),
     addOrRemoveLike() {
-      likeTip({
-        tip: this.tipId,
+      const like = {
+        tipId: this.tipId,
         owner: this.tipOwnerUid,
         likedByUser: this.likedByUser,
-      })
-        .then((res) => console.log("res", res))
+        user: {
+          uid: fb.auth().currentUser.uid,
+          username: fb.auth().currentUser.displayName,
+        },
+      };
+
+      likeTip(like)
+        .then(this.updateLocalFriendTipsLikesAction(like))
         .catch((error) => console.log("error", error));
     },
   },
@@ -101,7 +110,7 @@ $liked-heart-color: #ff3c3c;
     overflow: hidden;
 
     .heart-counter-numbers {
-      transition: transform 0.3s ease-out;
+      transition: transform 0.15s ease-out;
       transform: translateY(-24px);
     }
   }
@@ -109,7 +118,7 @@ $liked-heart-color: #ff3c3c;
   /* HEART */
 
   svg {
-    transition: all 0.3s ease-out;
+    transition: all 0.15s ease-out;
     margin-left: 0.5em;
   }
 

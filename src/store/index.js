@@ -14,18 +14,16 @@ const initialState = () => {
     error: null,
     userProfile: null,
     userTips: [],
+    friendTips: [],
     followers: null,
     pendingFollowers: null,
   };
 };
 
-let x = 0;
-
 fb.auth.onAuthStateChanged((user) => {
   if (user) {
     store.commit("SET_USER", user);
     store.dispatch("fetchUserDataAction", user.uid);
-    console.log("onAuthChanged fired", x++, x);
   } else {
     store.commit("SET_INITIAL_STATE", initialState());
   }
