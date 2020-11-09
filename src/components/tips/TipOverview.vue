@@ -5,6 +5,7 @@
       placeholder="Search tips by title"
       v-model="searchQuery"
     />
+
     <!-- {{ isFollower }} -->
     <!-- {{ user }} -->
     <!-- CHECK IF THE VISITOR IS A USER -->
@@ -28,8 +29,9 @@
           v-for="tip in filteredTips"
           :key="tip.id"
           :tip="tip.content"
-          :id="tip.id"
+          :tip-id="tip.id"
           :is-owner="isOwner"
+          :tip-owner-uid="uid"
           :is-follower="isFollower"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"

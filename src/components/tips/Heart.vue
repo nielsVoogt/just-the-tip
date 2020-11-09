@@ -5,16 +5,22 @@
       {
         'heart--has-likes': likes.length !== 0,
         'heart--blocked': allowInteraction === false,
+        'heart--liked': likedByUser === true,
       },
     ]"
+    @click="addOrRemoveLike()"
   >
-    {{ likes }}
     <div class="heart-counter">
-      <div class="heart-counter-current">
-        {{ likes.length }}
-      </div>
-      <div class="heart-counter-hover">
-        {{ likes.length + 1 }}
+      <div class="heart-counter-numbers">
+        <div class="heart-counter-decrement">
+          {{ likes.length - 1 }}
+        </div>
+        <div class="heart-counter-current">
+          {{ likes.length }}
+        </div>
+        <div class="heart-counter-increment">
+          {{ likes.length + 1 }}
+        </div>
       </div>
     </div>
     <svg
@@ -36,6 +42,8 @@
   </div>
 </template>
 <script>
+import likeTip from "@/utils/likeTip";
+
 export default {
   name: "Heart",
   props: {
@@ -47,54 +55,102 @@ export default {
       type: Boolean,
       required: true,
     },
+    likedByUser: {
+      type: Boolean,
+      required: false,
+    },
+    tipId: {
+      type: String,
+      required: true,
+    },
+    tipOwnerUid: {
+      type: String,
+      required: false,
+    },
+  },
+  methods: {
+    addOrRemoveLike() {
+      likeTip({
+        tip: this.tipId,
+        owner: this.tipOwnerUid,
+        likedByUser: this.likedByUser,
+      })
+        .then((res) => console.log("res", res))
+        .catch((error) => console.log("error", error));
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
+$heart-color: #9a9a9a;
+$liked-heart-color: #ff3c3c;
+
 .heart {
   display: flex;
   align-items: center;
   color: #dbdbdb;
   font-weight: 500;
+  cursor: pointer;
+
+  /* HEART COUNTER */
 
   .heart-counter {
-    overflow: hidden;
     height: 24px;
+    line-height: 24px;
+    overflow: hidden;
 
-    .heart-counter-current,
-    .heart-counter-hover {
+    .heart-counter-numbers {
       transition: transform 0.3s ease-out;
+      transform: translateY(-24px);
     }
   }
 
-  &:hover {
-    color: #9a9a9a;
+  /* HEART */
 
-    .heart-counter-current,
-    .heart-counter-hover {
-      transform: translateY(-100%);
+  svg {
+    transition: all 0.3s ease-out;
+    margin-left: 0.5em;
+  }
+
+  /* HOVER WHEN NOT LIKED YET */
+
+  &:hover {
+    color: $heart-color;
+
+    .heart-counter-numbers {
+      transform: translateY(calc(24px - 100%));
     }
 
     svg {
       transform: scale(1.15);
-      fill: #ff3c3c;
-      stroke: #ff3c3c;
+      fill: $liked-heart-color;
+      stroke: $liked-heart-color;
     }
   }
 
-  svg {
-    transition: transform 0.3s ease-out;
-    margin-left: 0.5em;
-    cursor: pointer;
-  }
+  /* HAS LIKES */
 
   &--has-likes {
-    color: #9a9a9a;
+    color: $heart-color;
 
     svg {
-      fill: #ff3c3c;
-      stroke: #ff3c3c;
+      fill: $liked-heart-color;
+      stroke: $liked-heart-color;
+    }
+  }
+
+  &--liked:hover {
+    color: $heart-color;
+
+    .heart-counter-numbers {
+      transform: translateY(0px);
+    }
+
+    svg {
+      transform: scale(0.95);
+      fill: $heart-color;
+      stroke: $heart-color;
     }
   }
 

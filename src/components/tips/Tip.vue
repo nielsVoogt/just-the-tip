@@ -28,7 +28,13 @@
 
     <div class="tip-footer">
       <Label :name="tip.category" />
-      <Heart :likes="tip.likes" :allow-interaction="allowInteraction" />
+      <Heart
+        :likes="tip.likes"
+        :allow-interaction="allowInteraction"
+        :liked-by-user="this.tip.likes.some((e) => e.uid === this.user.uid)"
+        :tip-id="tipId"
+        :tip-owner-uid="tipOwnerUid"
+      />
     </div>
   </div>
 </template>
@@ -60,7 +66,11 @@ export default {
       type: Boolean,
       required: false,
     },
-    id: {
+    tipId: {
+      type: String,
+      required: true,
+    },
+    tipOwnerUid: {
       type: String,
       required: false,
     },
@@ -73,10 +83,7 @@ export default {
     ...mapGetters(["user"]),
     allowInteraction() {
       if (this.isOwner) return false;
-      if (this.isFollower) {
-        return true;
-      }
-
+      if (this.isFollower) return true;
       return false;
     },
   },
@@ -87,11 +94,6 @@ export default {
     deleteTip() {
       this.$emit("delete");
     },
-  },
-  created() {
-    if (this.tip.likes.length && this.user) {
-      console.log(this.tip.likes.some((e) => e.uid === this.user.uid));
-    }
   },
 };
 </script>
