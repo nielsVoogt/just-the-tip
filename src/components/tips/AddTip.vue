@@ -145,7 +145,7 @@ export default {
       addTip(tip)
         .then((tipId) => {
           // Add the tip to vuex store
-          this.$store.dispatch("addNewTipAction", {
+          this.$store.dispatch("addNewLocalTipAction", {
             id: tipId,
             content: tip,
           });

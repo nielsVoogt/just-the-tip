@@ -57,7 +57,7 @@ export default {
     confirmDelete() {
       deleteTip(this.id)
         .then(() => {
-          this.$store.dispatch("deleteTipAction", this.id);
+          this.$store.dispatch("deleteLocalTipAction", this.id);
           this.$notificationHub.$emit("success", "Deleted tip!");
           this.closeModal();
         })

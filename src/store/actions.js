@@ -23,12 +23,16 @@ const actions = {
     });
   },
 
-  addNewTipAction: ({ commit }, tip) => {
+  addNewLocalTipAction: ({ commit }, tip) => {
     commit(types.ADD_NEW_TIP, tip);
   },
 
-  deleteTipAction: ({ commit }, id) => {
+  deleteLocalTipAction: ({ commit }, id) => {
     commit(types.DELETE_TIP, id);
+  },
+
+  editLocalTipAction: ({ commit }, tip) => {
+    commit(types.EDIT_TIP, tip);
   },
 
   fetchUserDataAction({ commit, dispatch }, uid) {

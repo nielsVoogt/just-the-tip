@@ -107,6 +107,8 @@ export default {
     },
 
     deleteUser() {
+      // Move this into seperate function that does clean up,
+      // or write a cloud function to do so..
       const user = fb.auth().currentUser;
       user
         .delete()

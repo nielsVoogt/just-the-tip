@@ -9,3 +9,4 @@ export const SET_NEW_FOLLOWER = "SET_NEW_FOLLOWER";
 export const DELETE_TIP = "DELETE_TIP";
 export const SET_FRIEND_TIPS = "SET_FRIEND_TIPS";
 export const UPDATE_FRIENDS_TIPS_LIKES = "UPDATE_FRIENDS_TIPS_LIKES";
+export const EDIT_TIP = "EDIT_TIP";

@@ -1,6 +1,7 @@
 import {
   ADD_NEW_TIP,
   DELETE_TIP,
+  EDIT_TIP,
   SET_FOLLOWERS,
   SET_FRIEND_TIPS,
   SET_INITIAL_STATE,
@@ -26,6 +27,15 @@ const mutations = {
 
   [SET_USER_TIPS](state, payload) {
     state.userTips = payload;
+  },
+
+  [EDIT_TIP](state, payload) {
+    const tipIndex = state.userTips.findIndex((i) => i.id === payload.id);
+    const target = state.userTips[tipIndex].content;
+    target.title = payload.content.title;
+    target.description = payload.content.description;
+    target.category = payload.content.category;
+    target.url = payload.content.url;
   },
 
   [SET_FRIEND_TIPS](state, payload) {

@@ -2,6 +2,7 @@
   <Modal v-show="modalVisibile" @close="closeModal()" title="Edit tip" hasForm>
     <template v-slot:body>
       <fieldset>
+        {{ tipCopy }}
         <Input
           type="text"
           label="Title"
@@ -53,6 +54,7 @@ import editTip from "@/utils/editTip";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { mapActions } from "vuex";
 
 export default {
   name: "EditTip",
@@ -113,14 +115,16 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["editLocalTipAction"]),
+
     validate() {
       if (this.selectedCategory === "") {
         this.fieldErrors.category = "You haven't selected a category";
       }
-      if (this.$v.$invalid) {
-        if (!this.$v.title.$required)
+      if (this.$v.tipCopy.invalid) {
+        if (!this.$v.tipCopy.title.required)
           this.fieldErrors.title = "Title can't be empty";
-        if (!this.$v.description.$required)
+        if (!this.$v.tipCopy.description.required)
           this.fieldErrors.description = "Description can't be empty";
       } else {
         this.saveEdit();
@@ -137,6 +141,8 @@ export default {
 
       editTip(newTip, this.tip.id)
         .then(() => {
+          console.log("NewTip:", newTip);
+          this.editLocalTipAction({ id: this.tip.id, content: newTip });
           this.$notificationHub.$emit("success", "Tip edited!");
           this.closeModal();
         })
