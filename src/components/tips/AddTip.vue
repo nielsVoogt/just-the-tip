@@ -156,7 +156,7 @@ export default {
           this.closeModal();
           this.resetForm();
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     },
 
     closeModal() {

@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     ...mapActions(["updateLocalFriendTipsLikesAction"]),
+
     addOrRemoveLike() {
       const like = {
         tipId: this.tipId,

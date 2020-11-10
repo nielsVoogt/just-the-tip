@@ -114,24 +114,41 @@ export default {
   },
   methods: {
     validate() {
-      console.log(this.tipCopy.url);
-      // return;
+      if (this.selectedCategory === "") {
+        this.fieldErrors.category = "You haven't selected a category";
+      }
+      if (this.$v.$invalid) {
+        if (!this.$v.title.$required)
+          this.fieldErrors.title = "Title can't be empty";
+        if (!this.$v.description.$required)
+          this.fieldErrors.description = "Description can't be empty";
+      } else {
+        this.saveEdit();
+      }
+    },
 
+    saveEdit() {
       const newTip = {
         title: this.tipCopy.title,
         category: this.tipCopy.category,
         description: this.tipCopy.description,
-        // url: this.tipCopy.url,
+        url: this.tipCopy.url,
       };
 
-      // TODO: Validation on fields
-      editTip(newTip, this.tip.id);
+      editTip(newTip, this.tip.id)
+        .then(() => {
+          this.$notificationHub.$emit("success", "Tip edited!");
+          this.closeModal();
+        })
+        .catch((error) => console.error(error));
     },
+
     validateUrl() {
-      if (!this.$v.url.url) {
+      if (!this.$v.tipCopy.url) {
         this.fieldErrors.url = "Please enter a valid url";
       }
     },
+
     closeModal() {
       this.$emit("close");
       setTimeout(() => (this.tipCopy = {}), 200);

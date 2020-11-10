@@ -47,7 +47,7 @@ const actions = {
       .then((tips) => {
         commit(types.SET_USER_TIPS, tips);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   },
 
   fetchPendingFollowersAction({ commit }) {
@@ -55,7 +55,7 @@ const actions = {
       .then((pendingFollowers) => {
         commit(types.SET_PENDING_FOLLOWERS, pendingFollowers);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   },
 
   fetchFollowersAction({ commit }) {
