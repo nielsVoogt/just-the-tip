@@ -2,11 +2,9 @@
   <div id="menu">
     <div v-if="isUserAuth">
       <router-link :to="{ name: 'MyTips' }">Your tips</router-link> |
-      <router-link :to="{ name: 'Friends' }">Your friends</router-link>
-
-      <div>
-        <router-link :to="{ name: 'Settings' }">Settings</router-link>
-      </div>
+      <router-link :to="{ name: 'Friends' }">Your friends</router-link> |
+      <router-link :to="{ name: 'Favorites' }">Your Favorites</router-link> |
+      <router-link :to="{ name: 'Settings' }">Settings</router-link> |
       <button @click="logOut()">Log out</button>
     </div>
     <div v-else>

@@ -8,21 +8,6 @@ import getUserProfile from "@/utils/getUserProfile";
 const fb = require("@/firebaseConfig.js");
 
 const actions = {
-  deleteAccountAction: ({ commit }, payload) => {
-    const user = payload.user;
-    return new Promise((resolve, reject) => {
-      user
-        .delete()
-        .then(() => {
-          commit(types.SET_USER, null);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  },
-
   addNewLocalTipAction: ({ commit }, tip) => {
     commit(types.ADD_NEW_TIP, tip);
   },

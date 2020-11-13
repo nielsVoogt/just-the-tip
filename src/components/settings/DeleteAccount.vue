@@ -42,6 +42,7 @@ import { required, minLength } from "vuelidate/lib/validators";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { mapActions } from "vuex";
 
 export default {
   name: "DeleteAccount",
@@ -107,13 +108,12 @@ export default {
     },
 
     deleteUser() {
-      // Move this into seperate function that does clean up,
-      // or write a cloud function to do so..
       const user = fb.auth().currentUser;
       user
         .delete()
         .then(() => {
           console.log("Delete succesful");
+          this.closeModal();
         })
         .catch((error) => {
           console.log(error);

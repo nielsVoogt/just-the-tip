@@ -20,6 +20,7 @@ const initialState = () => {
   };
 };
 
+// @TODO: This looks meh.. Please refactor
 fb.auth.onAuthStateChanged((user) => {
   if (user) {
     store.commit("SET_USER", user);
