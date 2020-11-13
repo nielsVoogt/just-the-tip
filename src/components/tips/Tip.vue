@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    isFavorite: {
+      Boolean,
+      required: false,
+    },
     tip: {
       type: Object,
       required: true,
@@ -84,6 +88,7 @@ export default {
     allowInteraction() {
       if (this.isOwner) return false;
       if (this.isFollower) return true;
+      if (this.isFavorite) return true;
       return false;
     },
   },

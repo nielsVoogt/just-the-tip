@@ -72,7 +72,7 @@ export default {
   created() {
     getUidFromSlug(this.$route.params.slug)
       .then((uid) => this.checkIfProfileIsPublic(uid))
-      .catch((this.userNotFound = true));
+      .catch(() => (this.userNotFound = true));
   },
   beforeDestroy() {
     this.editFriendTipsAction([]);

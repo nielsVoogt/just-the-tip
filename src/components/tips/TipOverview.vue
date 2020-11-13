@@ -6,10 +6,8 @@
       v-model="searchQuery"
     />
 
-    <!-- {{ isFollower }} -->
-    <!-- {{ user }} -->
-    <!-- CHECK IF THE VISITOR IS A USER -->
-    <div v-if="user">
+    <div v-if="user && isFavorite === false">
+      {{ uid }}
       <Button @click="addTip()" v-if="isOwner">Add new tip</Button>
       <div v-else>
         <Button type="button" @click="addNewFriend()" v-if="!isFollower">
@@ -33,6 +31,7 @@
           :is-owner="isOwner"
           :tip-owner-uid="uid"
           :is-follower="isFollower"
+          :is-favorite="isFavorite"
           v-on:delete="deleteTip(tip)"
           v-on:edit="editTip(tip)"
           v-show="
@@ -115,6 +114,10 @@ export default {
       required: true,
     },
     isOwner: {
+      type: Boolean,
+      required: false,
+    },
+    isFavorite: {
       type: Boolean,
       required: false,
     },

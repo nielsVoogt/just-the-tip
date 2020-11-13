@@ -11,7 +11,7 @@ export default function addFriend(newFriendUid) {
   return new Promise((resolve, reject) => {
     followerRef.get().then((doc) => {
       if (doc.exists) {
-        if (doc.data().pending.find((o) => o.uid === uid)) {
+        if (doc.data().pending.find((o) => o.uid === newFriendUid)) {
           // Duplicate of newFollower found, abort mission
           reject("duplicate");
         } else {

@@ -1,7 +1,13 @@
 <template>
   <div>
     <h1>I am favorites</h1>
-    <TipOverview :tips="likedTips" :is-owner="false" v-if="likedTips.length" />
+    <TipOverview
+      :tips="likedTips"
+      :is-owner="false"
+      :is-favorite="true"
+      v-if="likedTips.length"
+      :uid="user.uid"
+    />
   </div>
 </template>
 
@@ -21,7 +27,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["followers"]),
+    ...mapGetters(["followers", "user"]),
   },
   created() {
     const followersUids = this.followers.map((follower) => follower.uid);
