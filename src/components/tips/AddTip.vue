@@ -123,12 +123,14 @@ export default {
     validate() {
       if (this.selectedCategory === "") {
         this.fieldErrors.category = "You haven't selected a category";
+        return;
       }
       if (this.$v.$invalid) {
         if (!this.$v.title.$required)
           this.fieldErrors.title = "Title can't be empty";
         if (!this.$v.description.$required)
           this.fieldErrors.description = "Description can't be empty";
+        return;
       } else {
         this.addNewTip();
       }

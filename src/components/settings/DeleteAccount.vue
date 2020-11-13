@@ -112,6 +112,9 @@ export default {
       user
         .delete()
         .then(() => {
+          // @TODO
+          // Extend cloud function to delete all data from user
+          // Check if AuthChanged is triggered
           console.log("Delete succesful");
           this.closeModal();
         })
