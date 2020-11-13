@@ -5,6 +5,7 @@
   "author": "Niels Voogt <n.voogt@gmail.com",
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:prod": "serve -s dist",
     "lint": "vue-cli-service lint",
     "build:dev": "vue-cli-service build --mode development",
     "build:prod": "vue-cli-service build --mode production",
