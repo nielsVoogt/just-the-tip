@@ -19,12 +19,12 @@ export default {
 <style scoped lang="scss">
 .label {
   background: orange;
-  padding: 0 0.75em;
+  padding: 0.125em 0.5em;
   font-size: 0.875rem;
-  height: 25px;
-  line-height: 25px;
   color: white;
-  border-radius: 20px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
 
   &--recipe {
     background: #5cba5a;

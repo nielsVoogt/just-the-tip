@@ -149,12 +149,12 @@ export default {
 
       const changeButtonWidth = {
         targets: ".navigation-link",
-        width: this.isOpen ? ["210px", "45px"] : ["45px", "210px"],
+        width: this.isOpen ? [210, 45] : [45, 210],
       };
 
       const fadeInButtonName = {
         targets: ".navigation-link-name",
-        translateX: this.isOpen ? ["-15px", 0] : [0, "-15px"],
+        translateX: this.isOpen ? [-15, 0] : [0, -15],
         opacity: this.isOpen ? [1, 0] : [0, 1],
       };
 
@@ -223,10 +223,6 @@ $user-image-size: $navigation-button-size;
       margin-right: 0.25em;
     }
   }
-}
-
-#ghostery-purple-box {
-  display: none;
 }
 
 .navigation-divider {
@@ -302,17 +298,17 @@ $user-image-size: $navigation-button-size;
   right: 0;
   top: 0;
   bottom: 0;
-  /* transition: all 0.2s ease-out; */
-
   display: flex;
   flex-direction: column;
+
+  @media (min-width: 500px) {
+    transform: none;
+    left: 0;
+    right: auto;
+  }
 
   .navigation-links {
     margin-top: auto;
   }
-  /*
-  &--isOpen {
-    transform: none;
-  } */
 }
 </style>

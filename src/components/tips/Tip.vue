@@ -103,58 +103,65 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+$tip-border-color: #e1e7ef;
+
 .tip {
   background: white;
-  margin: 1em;
-  width: 350px;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.05);
-  border-radius: 15px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid $tip-border-color;
+  border-bottom-width: 3px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
 
-  &:hover {
-    .options-menu {
-      opacity: 1;
+  .tip-content {
+    padding: 1em;
+  }
+
+  .tip-link {
+    color: #413eb9;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 1em;
+    font-size: 0.875rem;
+
+    svg {
+      position: relative;
+      margin-right: 0.35em;
     }
   }
-}
 
-.tip-content {
-  padding: 1.5em;
-}
+  .tip-footer {
+    border-top: 1px solid $tip-border-color;
+    padding: 1em;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
 
-.tip-link {
-  color: #413eb9;
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  font-weight: 500;
-  margin-top: 1em;
-
-  svg {
-    position: relative;
-    margin-right: 0.35em;
+    .heart {
+      margin-left: auto;
+    }
   }
-}
 
-.tip-footer {
-  background: #f3f3f3;
-  padding: 1.5em;
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-
-  .heart {
-    margin-left: auto;
+  &:hover .options-menu {
+    opacity: 1;
   }
 }
 
 h2 {
-  font-size: 1.125rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 500;
   margin-bottom: 0.5em;
+  color: #393939;
+}
+
+p {
+  font-size: 0.875rem;
+  color: #6b6b6b;
 }
 </style>
