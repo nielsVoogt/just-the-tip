@@ -19,6 +19,7 @@
     "@vue/cli-plugin-unit-jest": "^4.5.8",
     "@vue/test-utils": "^1.1.0",
     "algoliasearch": "^4.5.1",
+    "animejs": "^3.2.1",
     "core-js": "^3.6.4",
     "firebase": "^7.24.0",
     "firebase-admin": "^9.3.0",
