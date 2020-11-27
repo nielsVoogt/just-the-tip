@@ -27,18 +27,14 @@ export default {
   display: none;
 }
 
-body {
-  background: #edf2f7;
-}
-
 .content {
   max-width: calc(100vw - 65px);
   overflow: auto;
   max-height: 100vh;
 
-  @media (min-width: 500px) {
-    max-width: calc(100vw - 230px);
-    padding-left: 230px;
+  @media (min-width: 600px) {
+    max-width: 100%;
+    padding-left: 255px;
   }
 }
 </style>

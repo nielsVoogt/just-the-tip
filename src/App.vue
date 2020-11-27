@@ -32,6 +32,7 @@ body {
   color: #525252;
   line-height: 1.4;
   font-weight: 400;
+  background: #edf2f7;
 }
 
 a {
