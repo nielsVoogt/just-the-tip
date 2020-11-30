@@ -41,11 +41,26 @@
         />
 
         <div v-if="cta === true">
-          hallo..?
-          <!--
-            @TODO: add Call to action here
-            "We limit the tips to ..., register to see all {{username}}'s tips"
-          -->
+          <div class="user-message">
+            <div class="user-message-emoji">😄</div>
+            <div class="user-message-content">
+              <h2>Want to see all tips from nelisthegreat69?</h2>
+              <p>
+                Register and will allow you to follow, like and save your
+                friends or favorite tips.
+              </p>
+
+              <div>
+                <Button type="button">
+                  Click here to register
+                </Button>
+              </div>
+
+              <a href="#">
+                I’d like to know some more details
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div v-if="noResults">
@@ -214,6 +229,19 @@ export default {
 </script>
 
 <style lang="scss">
+.user-message {
+  border: 2px dashed white;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  text-align: center;
+  height: 100%;
+  padding: 2em;
+
+  .user-message-emoji {
+    font-size: 2rem;
+  }
+}
+
 .tip-container {
   margin: 0 auto;
   display: grid;
@@ -230,6 +258,10 @@ export default {
 
   @media (min-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1500px) {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 </style>

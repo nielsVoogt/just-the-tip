@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div class="header">
+      <div class="friend">
+        <div class="friend-avatar"></div>
+        <div class="friend-details">
+          <div>nelisthegreat69</div>
+          <div>21 tips</div>
+        </div>
+      </div>
+    </div>
     <SearchUsers />
     <div v-if="followers">
       <Friend

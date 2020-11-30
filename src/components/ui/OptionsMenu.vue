@@ -49,7 +49,6 @@ export default {
   position: absolute;
   right: 0.75em;
   top: 1em;
-  opacity: 0;
 }
 
 .options-menu-button {

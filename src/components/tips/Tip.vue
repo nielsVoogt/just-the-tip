@@ -147,10 +147,6 @@ $tip-border-color: #e1e7ef;
       margin-left: auto;
     }
   }
-
-  &:hover .options-menu {
-    opacity: 1;
-  }
 }
 
 h2 {

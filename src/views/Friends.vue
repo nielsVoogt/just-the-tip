@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h1>This is Friends.</h1>
-    <FriendsOverview />
-  </div>
+  <FriendsOverview />
 </template>
 
 <script>

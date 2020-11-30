@@ -30,7 +30,7 @@ export default {
 .content {
   max-width: calc(100vw - 65px);
   overflow: auto;
-  max-height: 100vh;
+  /* max-height: 100vh; */
 
   @media (min-width: 600px) {
     max-width: 100%;

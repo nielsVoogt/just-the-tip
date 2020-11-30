@@ -1,6 +1,10 @@
 <template>
   <div>
-    <span class="navigation-overlay" />
+    <span
+      class="navigation-overlay"
+      @click="toggleNavigationState()"
+      :style="{ pointerEvents: isOpen ? 'all' : 'none' }"
+    />
     <div class="navigation" id="navigation">
       <template v-if="isUserAuth">
         <div class="navigation-top">
@@ -26,18 +30,12 @@
             />
           </svg>
 
-          <button
-            @click="logOut()"
-            class="navigation-logout-mobile hide-on-desktop"
-          >
-            <LogOutIcon />
+          <button @click="logOut()" class="navigation-logout-mobile">
+            <LogInIcon />
           </button>
         </div>
-
-        <!-- DIVIDER -->
         <hr class="navigation-divider" />
 
-        <!-- NAVIGATION USER SECTION -->
         <div class="navigation-user-section">
           <div
             class="navigation-user-image"
@@ -53,37 +51,33 @@
             </router-link>
           </div>
         </div>
-
-        <!-- NAVIGATION LINKS -->
-
         <nav class="navigation-links">
-          <router-link :to="{ name: 'Friends' }" class="navigation-link">
-            <div class="navigation-link-icon">
-              <RssIcon />
-            </div>
-            <span class="navigation-link-name">Your friends</span>
-          </router-link>
+          <NavLink label="Your feed" target="Feed">
+            <RssIcon />
+          </NavLink>
 
-          <router-link :to="{ name: 'Favorites' }" class="navigation-link">
-            <div class="navigation-link-icon">
-              <RssIcon />
-            </div>
-            <span class="navigation-link-name">Your Favorites</span>
-          </router-link>
+          <NavLink
+            label="Your friends"
+            target="Friends"
+            :show-notification="pendingFollowers && pendingFollowers.length > 0"
+            :amount="followers ? followers.length : 0"
+          >
+            <UsersIcon />
+          </NavLink>
+          <NavLink label="Your Favorites" target="Favorites" :amount="9">
+            <HeartIcon />
+          </NavLink>
 
-          <router-link :to="{ name: 'MyTips' }" class="navigation-link">
-            <div class="navigation-link-icon">
-              <RssIcon />
-            </div>
-            <span class="navigation-link-name">
-              Your tips
-            </span>
-          </router-link>
+          <NavLink
+            label="Your tips"
+            target="MyTips"
+            :amount="userProfile ? userProfile.tipCount : 0"
+          >
+            <PaperclipIcon />
+          </NavLink>
 
-          <!-- DIVIDER -->
           <hr class="navigation-divider" />
 
-          <!-- ADD NEW -->
           <button class="navigation-link navigation-link--action" type="button">
             <div class="navigation-link-icon">
               <PlusIcon />
@@ -93,24 +87,37 @@
             </span>
           </button>
 
-          <!-- DIVIDER -->
           <hr class="navigation-divider hide-on-desktop" />
+        </nav>
 
+        <div class="navigation-toggle">
           <button
-            class="navigation-link hide-on-desktop"
+            class="navigation-link"
             type="button"
             @click="toggleNavigationState()"
           >
             <div class="navigation-link-icon">
-              <MenuIcon v-if="!isOpen" />
-              <ChevronLeftIcon v-else />
+              <MenuIcon />
             </div>
             <span class="navigation-link-name">
               Close menu
             </span>
           </button>
-        </nav>
+        </div>
+
+        <div class="navigation-logout">
+          <hr class="navigation-divider" />
+          <button class="navigation-link" type="button" @click="logOut()">
+            <div class="navigation-link-icon">
+              <LogInIcon />
+            </div>
+            <span class="navigation-link-name">
+              Log out
+            </span>
+          </button>
+        </div>
       </template>
+
       <template v-else>
         <router-link :to="{ name: 'Registration' }">Register</router-link> |
         <router-link :to="{ name: 'Login' }">Log in</router-link>
@@ -122,28 +129,40 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import anime from "animejs";
+import NavLink from "@/components/ui/NavLink";
 
 import {
-  SettingsIcon,
+  LogInIcon,
   RssIcon,
   MenuIcon,
-  ChevronLeftIcon,
   PlusIcon,
-  LogOutIcon,
+  HeartIcon,
+  UsersIcon,
+  PaperclipIcon,
+  SettingsIcon,
 } from "vue-feather-icons";
 
 export default {
   name: "Navigation",
   components: {
-    SettingsIcon,
     RssIcon,
-    MenuIcon,
-    ChevronLeftIcon,
     PlusIcon,
-    LogOutIcon,
+    HeartIcon,
+    UsersIcon,
+    PaperclipIcon,
+    NavLink,
+    MenuIcon,
+    LogInIcon,
+    SettingsIcon,
   },
   computed: {
-    ...mapGetters(["isUserAuth", "userProfile"]),
+    ...mapGetters([
+      "isUserAuth",
+      "userProfile",
+      "followers",
+      "pendingFollowers",
+      "friendTips",
+    ]),
   },
   data() {
     return {
@@ -185,8 +204,14 @@ export default {
 
       const fadeInButtonName = {
         targets: ".navigation-link-name",
-        translateX: this.isOpen ? [-15, 0] : [0, -15],
         opacity: this.isOpen ? [1, 0] : [0, 1],
+      };
+
+      const scaleAmounts = {
+        targets: ".navigation-link-amount",
+        scale: this.isOpen ? [1, 0] : [0, 1],
+        opacity: this.isOpen ? [1, 0] : [0, 1],
+        delay: anime.stagger(75),
       };
 
       const duration = 250;
@@ -200,7 +225,8 @@ export default {
         .add(fadeInOverlay)
         .add(collapseNavigation, `-=${duration}`)
         .add(changeButtonWidth, `-=${duration}`)
-        .add(fadeInButtonName, `-=${duration}`);
+        .add(fadeInButtonName, `-=${duration}`)
+        .add(scaleAmounts, `-=${duration}`);
     },
   },
 };
@@ -212,21 +238,13 @@ $navigation-padding: 10px;
 $navigation-button-size: 45px;
 $user-image-size: $navigation-button-size;
 
-/* ---------------------- OVERLAY ---------------------- */
-
-.navigation-overlay {
-  background: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  opacity: 0;
-  pointer-events: none;
+.navigation-top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  display: flex;
+  align-items: center;
 }
-
-/* ---------------------- USER SECTION ---------------------- */
 
 .navigation-user-section {
   display: flex;
@@ -267,17 +285,24 @@ $user-image-size: $navigation-button-size;
   }
 }
 
-.navigation-divider {
-  background: #e8e8e8;
-  height: 1px;
-  margin-left: -$navigation-padding;
-  margin-right: -$navigation-padding;
-  border: 0;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.navigation-logout {
+  margin-top: 5px;
+  order: 1;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+
+  svg {
+    transform: rotate(180deg);
+  }
 }
 
-/* ---------------------- NAVIGATION LINK ---------------------- */
+.navigation-toggle {
+  @media (min-width: 600px) {
+    display: none;
+  }
+}
 
 .navigation-link {
   display: flex;
@@ -289,34 +314,74 @@ $user-image-size: $navigation-button-size;
   border-radius: 5px;
   overflow: hidden;
   font-weight: normal;
-
-  /* WHEN ON MOBILE */
+  position: relative;
 
   @media (max-width: 600px) {
-    width: 45px;
+    width: $navigation-button-size;
+  }
+
+  @media (min-width: 600px) {
+    width: 100% !important;
+  }
+
+  .navigation-link-amount {
+    margin-left: auto;
+    margin-right: 15px;
+    font-weight: normal;
+
+    @media (min-width: 600px) {
+      transform: scale(1) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.65);
+    }
+  }
+
+  .notification-orb {
+    $notification-orb-size: 8px;
+    animation: pulse 0.75s infinite alternate;
+    width: $notification-orb-size;
+    height: $notification-orb-size;
+    background: #00ca35;
+    border-radius: $notification-orb-size;
+    position: absolute;
+    top: 5px;
+    left: 5px;
   }
 
   .navigation-link-icon {
-    width: $navigation-button-size;
-    height: $navigation-button-size;
-    display: flex;
     align-items: center;
+    display: flex;
+    height: $navigation-button-size;
     justify-content: center;
     position: relative;
+    width: $navigation-button-size;
     z-index: 1;
   }
 
   .navigation-link-name {
-    position: absolute;
-    z-index: 1;
-    left: 60px;
+    display: flex;
+    font-weight: 500;
+    left: 55px;
     white-space: nowrap;
+    width: calc(100% - 45px);
+    z-index: 1;
 
     @media (min-width: 600px) {
       position: relative;
-      left: 10px;
+      left: 5px;
+      opacity: 1 !important;
     }
   }
+
+  /* THIS IS UGLY :( */
 
   &--action {
     background: #2c5282;
@@ -333,11 +398,30 @@ $user-image-size: $navigation-button-size;
   }
 }
 
-.navigation-top {
-  height: $navigation-button-size;
-  display: flex;
-  align-items: center;
+/* ---------------------- OVERLAY ---------------------- */
+
+.navigation-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  opacity: 0;
 }
+
+/* ---------------------- USER SECTION ---------------------- */
+
+.navigation-divider {
+  background: #e8e8e8;
+  height: 1px;
+  margin-left: -$navigation-padding;
+  margin-right: -$navigation-padding;
+  border: 0;
+}
+
+/* ---------------------- NAVIGATION LINK ---------------------- */
 
 .navigation-logout-mobile {
   align-items: center;
@@ -347,6 +431,10 @@ $user-image-size: $navigation-button-size;
   width: $navigation-button-size;
   margin-left: auto;
   color: #718096;
+
+  @media (min-width: 600px) {
+    display: none;
+  }
 }
 
 .navigation-logo {
@@ -358,14 +446,16 @@ $user-image-size: $navigation-button-size;
 
 .navigation {
   width: $navigation-width;
-  border-radius: 20px 0 0 20px;
   z-index: 1;
   padding: $navigation-padding;
   position: fixed;
   min-height: 100vh;
   background: white;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2.9px 7.5px rgba(0, 0, 0, 0.041),
+    0 7px 13.6px rgba(0, 0, 0, 0.049), 0 13.1px 18.6px rgba(0, 0, 0, 0.051),
+    0 23.5px 23px rgba(0, 0, 0, 0.052), 0 43.9px 28.1px rgba(0, 0, 0, 0.055),
+    0 105px 48px rgba(0, 0, 0, 0.07);
+
   transform: translateX(190px);
   right: 0;
   top: 0;
@@ -374,14 +464,16 @@ $user-image-size: $navigation-button-size;
   flex-direction: column;
 
   @media (min-width: 600px) {
-    border-radius: 0 20px 20px 0;
     left: 0;
     right: auto;
-    transform: none;
+    transform: none !important;
   }
 
   .navigation-links {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 
     @media (min-width: 600px) {
       display: flex;
@@ -393,6 +485,12 @@ $user-image-size: $navigation-button-size;
 
 .hide-on-desktop {
   @media (min-width: 600px) {
+    display: none;
+  }
+}
+
+.hide-on-mobile {
+  @media (max-width: 600px) {
     display: none;
   }
 }

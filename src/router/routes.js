@@ -53,6 +53,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: "/feed",
+        name: "Feed",
+        component: () => import("../views/Feed.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
         path: "/settings",
         name: "Settings",
         component: () => import("../views/Settings.vue"),
